@@ -15,9 +15,13 @@ class App(ctk.CTk):
         # ctk.set_appearance_mode("light")
         self.message_window = MessageFrame(self)
         self.message_window.place(relx=0, rely=0, relheight=0.9, relwidth=1)
-        self.response_frame = ctk.CTkFrame(self)
-        self.response_frame.place(relx=0, rely=0.9, relheight=0.1, relwidth=1)
-        
+        # self.response_frame = ctk.CTkFrame(self)
+        # self.response_frame.place(relx=0, rely=0.9, relheight=0.1, relwidth=1)
+
+        self.action_window = ActionFrame(self)
+        self.action_window.place(relx=0, rely=0.9, relheight=0.1, relwidth=1)
+
+
         self.mainloop()
 
 App()
