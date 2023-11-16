@@ -12,7 +12,7 @@ class App(ctk.CTk):
         self.configure(
             background=("#1f2125", "#ffffff")
         )
-        ctk.set_appearance_mode("light")
+        # ctk.set_appearance_mode("light")
         self.message_window = MessageFrame(self)
         self.message_window.place(relx=0, rely=0, relheight=0.9, relwidth=1)
         self.response_frame = ctk.CTkFrame(self)
