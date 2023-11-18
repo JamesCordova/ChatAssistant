@@ -8,13 +8,14 @@ class LogicalAssist():
         self.database = database
         self.current_directory = self.database
         self.username = "Usuario"
+        self.query = None
 
-    def structure_assist_response(self):
+    def assist_menu_response(self):
         presentation = self.current_directory.get(cf.PRESENTATION_KEY)
         options = self.get_list_menu()
         return presentation, options
 
-    def structure_user_response(self):
+    def assist_content_response(self):
         content = self.is_concept()
         imgs = self.current_directory.get(cf.IMAGES_KEY)
         return content, imgs
@@ -33,16 +34,28 @@ class LogicalAssist():
     
     def is_question(self):
         return self.current_directory.get("Test")
+    
+    def get_keyword_query(self):
+        if not self.is_menu():
+            return
+        for key in self.is_menu():
+            if key.lower() in self.query.lower():
+                return key
+            
+        return None
 
     def text_to_voice(sentence):
         answer = pyttsx3.init()
         answer.say(sentence)
         answer.runAndWait()
 
-    def recognize_voice(microphone, voice_recognizer):
-        # query = input()
+    @staticmethod
+    def recognize_voice():
+        # return input()
         # Initialize recognizer
         query = None
+        microphone = speech_recognition.Microphone()
+        voice_recognizer = speech_recognition.Recognizer()
 
         # Use microphone as source
         try:

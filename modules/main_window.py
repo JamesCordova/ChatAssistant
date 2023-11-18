@@ -39,17 +39,32 @@ class MessageFrame(ctk.CTkScrollableFrame):
         #     return widget
         self.messages.append(widget)
         self.current_row += 1
-        self._scrollbar.set(start_value=1, end_value=1)
+        self._scrollbar.set(start_value=0.9, end_value=1)
+        if type(widget) is UserMessage:
+            self.event_generate("<<UserQuery>>")
         print()
         return widget
 
 class AssistMessage(ctk.CTkFrame):
-    def __init__(self, parent, root, image = None, text = ""):
+    def __init__(self, parent, root, image = None, text = "", is_menu = False):
         super().__init__(
             master = parent,
             fg_color="transparent"
         )
-        ctk.CTkLabel(self, text = text, corner_radius=15, fg_color=("#dcdcdc", "#2b2b2b")).pack(anchor="w")
+        self.string_message = ""
+        self.is_menu = is_menu
+        print(text)
+        if self.is_menu:
+            for i, option in enumerate(text, start = 1):
+                self.string_message += f"{str(i)}) {option.capitalize()}\n"
+        elif type(text) is list:
+            for sentence in text:
+                self.string_message += f"{sentence} "
+        else:
+            self.string_message = text
+
+            
+        ctk.CTkLabel(self, text = self.string_message, corner_radius=15, fg_color=("#dcdcdc", "#2b2b2b"), wraplength=300, justify="left").pack(anchor="w")
 
         self.image_message = image
         if self.image_message:
@@ -67,7 +82,7 @@ class UserMessage(ctk.CTkFrame):
             fg_color="transparent"
         )
         self.message = ctk.CTkLabel(self, corner_radius=15, text = text, fg_color=("#b4b4b4", "#3c3c3c"))
-        self.message.pack(anchor="e")
+        self.message.pack(anchor="e", pady=5)
         pass
 
 
@@ -124,18 +139,16 @@ class ActionFrame(ctk.CTkFrame):
             placeholder_text = "Escribe tu petición",
             fg_color = "transparent"
         )
-        self.text_input.bind("<Return>", lambda: print())
+        self.text_input.bind("<Return>", self.send_text_query)
+        self.query = None
         self.micro_mode = True
 
         self.grid_buttons()
 
     def active_micro(self):
         if self.micro_mode:
-            print(self.micro_mode)
-            assist_message = AssistMessage(self.parent.message_window, root = self.parent, image=True, text="Hello, may be i can help you")
-            assist_message.grid(row=self.parent.message_window.current_row, column=0, columnspan=2, sticky="ew")
-            self.parent.message_window.add_message(assist_message)
-            self.parent.message_window._scrollbar.set(start_value=0.9, end_value=1)
+            self.query = "start"
+            self._canvas.event_generate("<<DoneQuery>>")
             
             # user_message = UserMessage(self.parent.message_window, text="Yes, help me with this")
             # user_message.grid(row=self.parent.message_window.current_row+1, column=1, columnspan=2, sticky="e")
@@ -145,6 +158,9 @@ class ActionFrame(ctk.CTkFrame):
         self.text_input.grid_forget()
         self.grid_buttons()
         self.micro_mode = True
+
+    def send_audio_query(self):
+
         pass
 
     def active_keyboard(self):
@@ -160,7 +176,11 @@ class ActionFrame(ctk.CTkFrame):
         self.voice_button.grid_info()
         self.grid_text()
         self.micro_mode = False
-        pass
+    
+    def send_text_query(self, event):
+        self.query = self.text_input.get()
+        self.text_input.delete(0,tk.END)
+        self._canvas.event_generate("<<DoneQuery>>")
     
     def grid_buttons(self):
         self.voice_button.grid(
