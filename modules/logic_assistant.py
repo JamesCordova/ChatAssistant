@@ -24,7 +24,13 @@ class LogicalAssist():
         return list(self.current_directory.get(cf.OPTIONS_KEY).keys())
 
     def access_to(self, command_key):
-        return self.current_directory.get(command_key)
+        if command_key:
+            pre_directory = self.is_menu().get(command_key.capitalize())
+            print(pre_directory)
+        if pre_directory:
+            self.current_directory = pre_directory
+        print(self.current_directory)
+        return self.current_directory
 
     def is_concept(self):
         return self.current_directory.get(cf.CONTENT_KEY)

@@ -20,16 +20,6 @@ class MessageFrame(ctk.CTkScrollableFrame):
         self.max_rows = 10
         self.messages = []
         self.current_row = 0
-        while self.current_row < 14:
-            assist_message = AssistMessage(self, root = parent, image=True, text="Hello, may be i can help you")
-            assist_message.grid(row=self.current_row, column=0, columnspan=2, sticky="ew")
-            self.add_message(assist_message)
-            print("assist" + str(self.current_row))
-            
-            user_message = UserMessage(self, text="Yes, help me with this")
-            user_message.grid(row=self.current_row, column=1, columnspan=2, sticky="e")
-            self.add_message(user_message)
-            print("user" + str(self.current_row))
 
         pass
 
@@ -46,7 +36,7 @@ class MessageFrame(ctk.CTkScrollableFrame):
         return widget
 
 class AssistMessage(ctk.CTkFrame):
-    def __init__(self, parent, root, image = None, text = "", is_menu = False):
+    def __init__(self, parent, root, images = [], text = "", is_menu = False):
         super().__init__(
             master = parent,
             fg_color="transparent"
@@ -64,16 +54,15 @@ class AssistMessage(ctk.CTkFrame):
             self.string_message = text
 
             
-        ctk.CTkLabel(self, text = self.string_message, corner_radius=15, fg_color=("#dcdcdc", "#2b2b2b"), wraplength=300, justify="left").pack(anchor="w")
+        ctk.CTkLabel(self, text = self.string_message, corner_radius=15, fg_color=("#dcdcdc", "#2b2b2b"), wraplength=300, justify="left").pack(anchor="w", pady=5, ipadx=5, ipady=10)
 
-        self.image_message = image
-        if self.image_message:
-            self.image_message = ImageFrame(
-                parent = self,
-                root = root
-            )
+        self.image_message = ImageFrame(
+            parent = self,
+            root = root,
+            images = images
+        )
+        if images:
             self.image_message.pack(anchor="nw", pady=5, expand=True, fill="both")
-            self.image_message.resize_image()
 
 class UserMessage(ctk.CTkFrame):
     def __init__(self, parent, text = ""):
@@ -87,7 +76,7 @@ class UserMessage(ctk.CTkFrame):
 
 
 class ImageFrame(ctk.CTkFrame):
-    def __init__(self, parent, root):
+    def __init__(self, parent, root, images = []):
         super().__init__(
             master = parent,
             fg_color="transparent"
@@ -95,20 +84,37 @@ class ImageFrame(ctk.CTkFrame):
         self.root = root
 
         # image 
-        self.image = Image.open("imgs/raccoon.jpg")
-        
-        self.resize_image()
+        self.current_images = []
 
-        ctk.CTkLabel(self, image=self.image_tk, text="", corner_radius=15, fg_color=("#dcdcdc", "#2b2b2b")).place(relx=0, rely=0, relwidth=1, relheight=1)
+        for image in images:
+            open_image = Image.open("imgs/" + image)
+            image_tk = self.resize_image(open_image)
+            image_label = ctk.CTkLabel(
+                master = self,
+                image = image_tk,
+                text = "",
+                corner_radius = 15,
+                fg_color = ("#dcdcdc", "#2b2b2b")
+            )
+            image_label.pack(
+                expand = True,
+                fill = "both"
+            )
 
 
-    def resize_image(self):
-        real_w, real_h = self.image.size
+    def resize_image(self, open_image):
+        real_w, real_h = open_image.size
         window_height = self.root.winfo_height()
         print(window_height)
-        self.image_height = window_height * 1
-        self.image_width = real_w * (self.image_height/real_h)
-        self.image_tk = ctk.CTkImage(light_image=self.image, dark_image=self.image, size=(self.image_width, self.image_height))
+        image_height = window_height * 0.4
+        image_width = real_w * (image_height / real_h)
+        image_tk = ctk.CTkImage(
+            light_image = open_image,
+            dark_image = open_image,
+            size = (image_width, image_height)
+        )
+        self.current_images.append(image_tk)
+        return image_tk
 
 
 class ActionFrame(ctk.CTkFrame):

@@ -9,7 +9,7 @@ import json
 class App(ctk.CTk):
     def __init__(self):
         super().__init__()
-        self.title("Main App")
+        self.title("Asistente")
         self.color_ui = (cf.BG_COLOR_DARK, cf.BG_COLOR_LIGHT)
         self.geometry("600x500")
         self.minsize(600,500)
@@ -21,6 +21,8 @@ class App(ctk.CTk):
         self.assistant = assist.LogicalAssist(self.database)
         self.message_frame = main_window.MessageFrame(self)
         self.message_frame.place(relx=0, rely=0, relheight=0.9, relwidth=1)
+        self.add_assist_message(self.assistant.current_directory.get(cf.PRESENTATION_KEY), optionable=False)
+        self.add_assist_message(self.assistant.get_list_menu(), optionable=True)
         # self.response_frame = ctk.CTkFrame(self)
         # self.response_frame.place(relx=0, rely=0.9, relheight=0.1, relwidth=1)
 
@@ -30,9 +32,6 @@ class App(ctk.CTk):
         self.action_frame.place(relx=0, rely=0.9, relheight=0.1, relwidth=1)
 
         self.message_frame.bind("<<UserQuery>>", self.respond_user)
-        
-        self.mainloop()
-    
     def load_database(self):
         with open("info.json", 'r', encoding="utf-8") as file:
             info_dictionary = json.load(file)
@@ -59,21 +58,25 @@ class App(ctk.CTk):
         print(command)
         if not command:
             # assist_message = self.assistant.not_recognized()
-            self.add_assist_message("No reconocido")
+            self.add_assist_message(text = "No reconocido")
             return
-        menu_exists = self.assistant.is_menu()
-        concept_exists = self.assistant.is_concept()
-        question_exists = self.assistant.is_question()
-        if menu_exists:
-            self.add_assist_message(self.assistant.current_directory.get(cf.PRESENTATION_KEY), False)
-            self.add_assist_message(self.assistant.get_list_menu(), True)
-        elif concept_exists:
-            self.add_assist_message(self.assistant.current_directory.get(cf.CONTENT_KEY), False)
-        elif question_exists:
+        self.assistant.access_to(command)
+        if self.assistant.is_menu():
+            self.add_assist_message(self.assistant.current_directory.get(cf.PRESENTATION_KEY), optionable=False)
+            self.add_assist_message(self.assistant.get_list_menu(), optionable=True)
+        elif self.assistant.is_concept():
+            self.add_assist_message(self.assistant.current_directory.get(cf.CONTENT_KEY), self.assistant.current_directory.get(cf.IMAGES_KEY), optionable=False)
+        elif self.assistant.is_question():
             pass
 
-    def add_assist_message(self, assist_message, optionable):
-        assist_message = main_window.AssistMessage(self.message_frame, root = self, image=True, text=assist_message, is_menu=optionable)
+    def add_assist_message(self, assist_message, images = [], optionable = False):
+        assist_message = main_window.AssistMessage(
+            parent = self.message_frame,
+            root = self,
+            images = images,
+            text = assist_message,
+            is_menu = optionable
+        )
         assist_message.grid(
             row = self.message_frame.current_row,
             column=0,

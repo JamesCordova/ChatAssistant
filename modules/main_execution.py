@@ -9,9 +9,6 @@ class MainExecution():
         self.database = self.load_database()
         self.assistant = assist.LogicalAssist(self.database)
         self.main_window = main_app.App()
-        self.main_window.action_window.voice_button.configure(
-            command = self.send_audio_message
-        )
         
 
 
@@ -19,8 +16,3 @@ class MainExecution():
         with open("info.json", 'r', encoding="utf-8") as file:
             info_dictionary = json.load(file)
         return info_dictionary
-    
-    def send_message(self, event):
-        self.assistant.query = self.main_window.action_window.query
-        print("done")
-        print(self.assistant.query)

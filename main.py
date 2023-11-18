@@ -1,3 +1,5 @@
-from modules import main_execution
+from modules import main_app
 
-main_execution.MainExecution()
+assistant = main_app.App()
+        
+assistant.mainloop()
