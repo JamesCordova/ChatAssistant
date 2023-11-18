@@ -2,27 +2,46 @@ import tkinter as tk
 from tkinter import ttk
 import customtkinter as ctk
 from PIL import Image
+from settings import *
 
 class MessageFrame(ctk.CTkScrollableFrame):
     def __init__(self, parent):
         super().__init__(master=parent)
         self.configure(
-            fg_color = "transparent",
+            fg_color = (BG_COLOR_LIGHT, BG_COLOR_DARK),
+            scrollbar_button_color = (BG_COLOR_LIGHT, BG_COLOR_DARK),
+            scrollbar_button_hover_color = ("#b4b4b4", "#3c3c3c"),
             height=0
         )
 
         self.columnconfigure((0,1,2), weight = 1)
         rows = tuple(range(16))
         self.rowconfigure(rows, weight = 1)
-        for y in range(0, 16, 2):
+        self.max_rows = 10
+        self.messages = []
+        self.current_row = 0
+        while self.current_row < 14:
             assist_message = AssistMessage(self, root = parent, image=True, text="Hello, may be i can help you")
-            assist_message.grid(row=y, column=0, columnspan=2, sticky="w")
+            assist_message.grid(row=self.current_row, column=0, columnspan=2, sticky="ew")
+            self.add_message(assist_message)
+            print("assist" + str(self.current_row))
             
-            user_frame = UserMessage(self, text="Yes, help me with this")
-            user_frame.grid(row=y+1, column=1, columnspan=2, sticky="e")
+            user_message = UserMessage(self, text="Yes, help me with this")
+            user_message.grid(row=self.current_row, column=1, columnspan=2, sticky="e")
+            self.add_message(user_message)
+            print("user" + str(self.current_row))
 
         pass
 
+    def add_message(self, widget):
+        # if len(self.messages) > self.max_rows:
+        #     self.messages.pop(0)
+        #     return widget
+        self.messages.append(widget)
+        self.current_row += 1
+        self._scrollbar.set(start_value=1, end_value=1)
+        print()
+        return widget
 
 class AssistMessage(ctk.CTkFrame):
     def __init__(self, parent, root, image = None, text = ""):
@@ -38,7 +57,7 @@ class AssistMessage(ctk.CTkFrame):
                 parent = self,
                 root = root
             )
-            self.image_message.pack(anchor="w", pady=5, expand=True, fill="both")
+            self.image_message.pack(anchor="nw", pady=5, expand=True, fill="both")
             self.image_message.resize_image()
 
 class UserMessage(ctk.CTkFrame):
@@ -83,6 +102,7 @@ class ActionFrame(ctk.CTkFrame):
             master = parent,
             fg_color = "transparent"
         )
+        self.parent = parent
         self.columnconfigure((0, 2, 4), weight=1, uniform="a")
         self.columnconfigure((1, 3), weight=3, uniform="a")
         self.rowconfigure(0, weight=1)
@@ -105,13 +125,21 @@ class ActionFrame(ctk.CTkFrame):
             fg_color = "transparent"
         )
         self.text_input.bind("<Return>", lambda: print())
-        self.micro_mode = False
+        self.micro_mode = True
 
         self.grid_buttons()
 
     def active_micro(self):
         if self.micro_mode:
             print(self.micro_mode)
+            assist_message = AssistMessage(self.parent.message_window, root = self.parent, image=True, text="Hello, may be i can help you")
+            assist_message.grid(row=self.parent.message_window.current_row, column=0, columnspan=2, sticky="ew")
+            self.parent.message_window.add_message(assist_message)
+            self.parent.message_window._scrollbar.set(start_value=0.9, end_value=1)
+            
+            # user_message = UserMessage(self.parent.message_window, text="Yes, help me with this")
+            # user_message.grid(row=self.parent.message_window.current_row+1, column=1, columnspan=2, sticky="e")
+            # self.parent.message_window.add_message(user_message)
             pass
         self.keyboard_button.grid_forget()
         self.text_input.grid_forget()

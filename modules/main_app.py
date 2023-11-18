@@ -2,15 +2,17 @@ import tkinter as tk
 from tkinter import ttk
 import customtkinter as ctk
 from main_window import *
+from settings import *
 
 class App(ctk.CTk):
     def __init__(self):
         super().__init__()
         self.title("Main App")
+        self.color_ui = (BG_COLOR_DARK, BG_COLOR_LIGHT)
         self.geometry("600x500")
         self.minsize(600,500)
         self.configure(
-            background=("#1f2125", "#ffffff")
+            background = self.color_ui
         )
         # ctk.set_appearance_mode("light")
         self.message_window = MessageFrame(self)

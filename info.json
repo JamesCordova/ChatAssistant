@@ -1,5 +1,5 @@
 {
-    "Descripción":
+    "Presentación":
     [
         "Hola. Soy tu Asistente Virtual. Fui creada para instruirte todo respecto a la Estructura de un computador. Antes de empezar ¿Podrias decirme tu nombre?",
         "{username} Ahora voy a explicarte sobre las opciones que tiene este programa. Tienes 3 opciones para escoger.",
@@ -10,7 +10,7 @@
     "Opciones": 
     {
         "Aprendizaje": {
-            "Descripción": 
+            "Presentación": 
             [
                 "Muy bien, empecemos entonces.",
                 "¿Qué escogerás primero?"
@@ -19,7 +19,7 @@
             {
                 "Conceptos generales":
                 {
-                    "Descripción":
+                    "Presentación":
                     [
                         "¿Por cual deseas empezar?"
                     ],
@@ -82,7 +82,7 @@
                 },
                 "Cronograma instrucción add":
                 {
-                    "Descripción":
+                    "Presentación":
                     [
                         "¿Por cual deseas empezar?"
                     ],
