@@ -2,14 +2,14 @@ import tkinter as tk
 from tkinter import ttk
 import customtkinter as ctk
 from PIL import Image
-from settings import *
+from . import settings as cf
 
 class MessageFrame(ctk.CTkScrollableFrame):
     def __init__(self, parent):
         super().__init__(master=parent)
         self.configure(
-            fg_color = (BG_COLOR_LIGHT, BG_COLOR_DARK),
-            scrollbar_button_color = (BG_COLOR_LIGHT, BG_COLOR_DARK),
+            fg_color = (cf.BG_COLOR_LIGHT, cf.BG_COLOR_DARK),
+            scrollbar_button_color = (cf.BG_COLOR_LIGHT, cf.BG_COLOR_DARK),
             scrollbar_button_hover_color = ("#b4b4b4", "#3c3c3c"),
             height=0
         )

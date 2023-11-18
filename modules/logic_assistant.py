@@ -1,6 +1,6 @@
 import speech_recognition
 import pyttsx3
-from settings import *
+from . import settings as cf
 
 
 class LogicalAssist():
@@ -10,26 +10,26 @@ class LogicalAssist():
         self.username = "Usuario"
 
     def structure_assist_response(self):
-        presentation = self.current_directory.get(PRESENTATION_KEY)
+        presentation = self.current_directory.get(cf.PRESENTATION_KEY)
         options = self.get_list_menu()
         return presentation, options
 
     def structure_user_response(self):
         content = self.is_concept()
-        imgs = self.current_directory.get(IMAGES_KEY)
+        imgs = self.current_directory.get(cf.IMAGES_KEY)
         return content, imgs
     
     def get_list_menu(self):
-        return list(self.current_directory.get(OPTIONS_KEY).keys())
+        return list(self.current_directory.get(cf.OPTIONS_KEY).keys())
 
     def access_to(self, command_key):
         return self.current_directory.get(command_key)
 
     def is_concept(self):
-        return self.current_directory.get(CONTENT_KEY)
+        return self.current_directory.get(cf.CONTENT_KEY)
     
     def is_menu(self):
-        return self.current_directory.get(OPTIONS_KEY)
+        return self.current_directory.get(cf.OPTIONS_KEY)
     
     def is_question(self):
         return self.current_directory.get("Test")
