@@ -16,13 +16,10 @@ class App(ctk.CTk):
         self.configure(
             background = self.color_ui
         )
-        ctk.set_appearance_mode("light")
+        # ctk.set_appearance_mode("light")
         self.database = self.load_database()
-        self.assistant = assist.LogicalAssist(self.database)
         self.message_frame = main_window.MessageFrame(self)
         self.message_frame.place(relx=0, rely=0, relheight=0.9, relwidth=1)
-        self.add_assist_message(self.assistant.current_directory.get(cf.PRESENTATION_KEY), optionable=False)
-        self.add_assist_message(self.assistant.get_list_menu(), optionable=True)
         # self.response_frame = ctk.CTkFrame(self)
         # self.response_frame.place(relx=0, rely=0.9, relheight=0.1, relwidth=1)
 
@@ -32,6 +29,10 @@ class App(ctk.CTk):
         self.action_frame.place(relx=0, rely=0.9, relheight=0.1, relwidth=1)
 
         self.message_frame.bind("<<UserQuery>>", self.respond_user)
+
+        self.assistant = assist.LogicalAssist(self.database, hear_func = self.action_frame.hearing_button, stop_func = self.action_frame.recognized_button)
+        self.add_assist_message(self.assistant.current_directory.get(cf.PRESENTATION_KEY), optionable=False)
+        self.add_assist_message(self.assistant.get_list_menu(), optionable=True)
         self.mainloop()
         
     def load_database(self):
@@ -56,8 +57,9 @@ class App(ctk.CTk):
 
     def respond_user(self, event):
         command = self.assistant.get_keyword_query()
+        command = self.assistant.recognize_global_commands(command)
         if not command:
-            # assist_message = self.assistant.not_recognized()
+            # assist_message = self.assistant.not_recognized()s
             self.add_assist_message("No reconocido")
             return
         self.assistant.access_to(command)

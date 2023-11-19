@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 import customtkinter as ctk
-from PIL import Image, ImageTk
+from PIL import Image, ImageOps, ImageSequence
 from . import settings as cf
 
 class MessageFrame(ctk.CTkScrollableFrame):
@@ -14,9 +14,10 @@ class MessageFrame(ctk.CTkScrollableFrame):
             height=0
         )
 
-        self.columnconfigure((0,1,2), weight = 1)
+        self.columnconfigure((0,1), weight = 1, uniform = "a")
+        self.columnconfigure((2), weight = 2, uniform = "a")
         rows = tuple(range(16))
-        self.rowconfigure(rows, weight = 1)
+        self.rowconfigure(rows, weight = 2)
         self.max_rows = 10
         self.messages = []
         self.current_row = 0
@@ -55,7 +56,15 @@ class AssistMessage(ctk.CTkFrame):
             self.string_message = text
 
             
-        ctk.CTkLabel(self, text = self.string_message, corner_radius=15, fg_color=("#dcdcdc", "#2b2b2b"), wraplength=300, justify="left").pack(anchor="w", pady=5, ipadx=5, ipady=10)
+        self.message = ctk.CTkLabel(
+            master = self,
+            text = self.string_message,
+            corner_radius = 15,
+            fg_color=("#dcdcdc", "#2b2b2b"),
+            wraplength = 400,
+            justify="left"
+        )
+        self.message.pack(anchor="w", pady=5, ipadx=5, ipady=10)
 
         if images:
             self.image_message = ImageFrame(
@@ -63,7 +72,7 @@ class AssistMessage(ctk.CTkFrame):
                 root = root,
                 images = images
             )
-            self.image_message.pack(anchor="nw", pady=5, expand=True, fill="both")
+            self.image_message.pack(anchor="nw", pady=5, expand = True, fill = "both")
 
 class UserMessage(ctk.CTkFrame):
     def __init__(self, parent, text = ""):
@@ -93,31 +102,21 @@ class ImageFrame(ctk.CTkFrame):
         self.image_label = ctk.CTkLabel(master = root,text="image",corner_radius = 15,fg_color=("#dcdcdc", "#2b2b2b"))
         self.image_label = ctk.CTkLabel(
                 master = self,
-                text="image",
+                text="",
                 corner_radius = 15,
                 fg_color=("#dcdcdc", "#2b2b2b")
         )
-        self.image_label.pack(side="top")
+        self.image_label.place(
+            relx = 0,
+            rely = 0,
+            relwidth = 1,
+            relheight = 1,
+        )
         self.show_current_image()
 
         # buttons
-        self.prev_button = ctk.CTkButton(
-            master = self, 
-            text = "<",
-            text_color = cf.MESSAGE_COLOR_LIGHT,
-            corner_radius = 15,
-            fg_color = ("#dcdcdc", "#2b2b2b"),
-            command = self.show_prev_image
-        )
-        self.prev_button.pack(side=tk.LEFT)
-
-        self.next_button = ctk.CTkButton(
-            master = self,
-            text = ">",
-            text_color = cf.MESSAGE_COLOR_LIGHT,
-            command = self.show_next_image
-        )
-        self.next_button.pack(side=tk.RIGHT)
+        if len(self.image_paths) > 1:
+            self.place_navigation_buttons()
 
         self.image_label.bind("<Button-1>", self.open_current_image_system)
         
@@ -127,6 +126,46 @@ class ImageFrame(ctk.CTkFrame):
         current_ctk_image = self.resize_ctk_image(current_image)
         self.image_label.configure(
             image = current_ctk_image
+        )
+    def place_navigation_buttons(self):
+        default_arrow = Image.open(cf.ARROW_IMAGE)
+        mirror_arrow = ImageOps.mirror(default_arrow)
+        self.right_arrow = ctk.CTkImage(light_image = default_arrow)
+        self.left_arrow = ctk.CTkImage(light_image = mirror_arrow)
+        self.prev_button = ctk.CTkButton(
+            master = self,
+            text = "",
+            image = self.left_arrow,
+            compound = "left",
+            corner_radius = 15,
+            hover_color = (cf.MESSAGE_COLOR_LIGHT, cf.MESSAGE_COLOR_DARK),
+            fg_color = ("#dcdcdc", "#2b2b2b"),
+            bg_color = ("#dcdcdc", "#2b2b2b"),
+            command = self.show_prev_image
+        )
+        self.prev_button.place(
+            relx = 0,
+            rely = 0.4,
+            relwidth = 0.05,
+            relheight = 0.2
+        )
+
+        self.next_button = ctk.CTkButton(
+            master = self,
+            text = "",
+            image = self.right_arrow,
+            compound = "right",
+            corner_radius = 15,
+            hover_color = (cf.MESSAGE_COLOR_LIGHT, cf.MESSAGE_COLOR_DARK),
+            fg_color = ("#dcdcdc", "#2b2b2b"),
+            bg_color = ("#dcdcdc", "#2b2b2b"),
+            command = self.show_next_image
+        )
+        self.next_button.place(
+            relx = 0.95,
+            rely = 0.4,
+            relwidth = 0.05,
+            relheight = 0.2
         )
 
     def resize_ctk_image(self, open_image):
@@ -170,18 +209,22 @@ class ActionFrame(ctk.CTkFrame):
         self.columnconfigure((0, 2, 4), weight=1, uniform="a")
         self.columnconfigure((1, 3), weight=3, uniform="a")
         self.rowconfigure(0, weight=1)
+        self.current_frame = 0
         self.micro_image = ctk.CTkImage(light_image = Image.open(cf.MICROPHONE_IMAGE))
         self.keyboard_image = ctk.CTkImage(light_image = Image.open(cf.KEYBOARD_IMAGE))
         self.voice_button = ctk.CTkButton(
             master = self,
+            text = "",
             fg_color = (cf.BG_COLOR_LIGHT, cf.BG_COLOR_DARK),
             hover_color = (cf.MESSAGE_COLOR_LIGHT, cf.MESSAGE_COLOR_DARK),
             image = self.micro_image,
+            compound = "top",
             corner_radius = 999,
             command = self.active_micro
         )
         self.keyboard_button = ctk.CTkButton(
             master = self,
+            text = "",
             fg_color = (cf.BG_COLOR_LIGHT, cf.BG_COLOR_DARK),
             hover_color = (cf.MESSAGE_COLOR_LIGHT, cf.MESSAGE_COLOR_DARK),
             image = self.keyboard_image,
@@ -202,20 +245,37 @@ class ActionFrame(ctk.CTkFrame):
 
     def active_micro(self):
         if self.micro_mode:
-            self.query = "start"
+            self.query = self.parent.assistant.recognize_voice()
             self._canvas.event_generate("<<DoneQuery>>")
-            
-            # user_message = UserMessage(self.parent.message_window, text="Yes, help me with this")
-            # user_message.grid(row=self.parent.message_window.current_row+1, column=1, columnspan=2, sticky="e")
-            # self.parent.message_window.add_message(user_message)
             pass
         self.keyboard_button.grid_forget()
         self.text_input.grid_forget()
         self.grid_buttons()
         self.micro_mode = True
 
-    def send_audio_query(self):
+    def hearing_button(self):
+        self.gif_frames = [ctk.CTkImage(frame) for frame in ImageSequence.Iterator(Image.open(cf.HEARING_GIF))]
+        print("No error")
+        self.update_gif()
 
+    def update_gif(self):
+        # Display the current frame
+        self.voice_button.configure(
+            image = self.gif_frames[self.current_frame]
+        )
+
+        # Move to the next frame
+        self.current_frame += 1
+        if self.current_frame == len(self.gif_frames):
+            self.current_frame = 0
+
+        if True:
+            self.parent.after(100, self.update_gif)
+
+    def recognized_button(self):
+        # self.voice_button.configure(
+        #     image = self.micro_image
+        # )
         pass
 
     def active_keyboard(self):

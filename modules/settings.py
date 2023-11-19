@@ -12,7 +12,14 @@ IMAGES_KEY = "Imágenes"
 
 # PATHS
 IMAGES_PATH = "imgs"
+SOUNDS_PATH = "sounds"
 
-# IMAGES
+# MULTIMEDIA
 MICROPHONE_IMAGE = IMAGES_PATH + "/" + "microphone_icon.png"
 KEYBOARD_IMAGE = IMAGES_PATH + "/" + "keyboard_icon.png"
+ARROW_IMAGE = IMAGES_PATH + "/" + "arrow_head_icon.png"
+HEARING_GIF = IMAGES_PATH + "/" + "hear_animation.gif"
+
+# SOUNDS
+MIC_ON_SOUND = ""
+MIC_OFF_SOUND = ""

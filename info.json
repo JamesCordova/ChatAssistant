@@ -36,7 +36,7 @@
                                 "\n- Ejecución",
                                 "\n- Almacenamiento"
                             ],
-                            "Imágenes": ["fases.png"]
+                            "Imágenes": ["intro.png", "fases.png"]
                         },
                         "Lectura": {
                             "Contenido":
