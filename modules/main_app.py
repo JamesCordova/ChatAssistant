@@ -16,7 +16,7 @@ class App(ctk.CTk):
         self.configure(
             background = self.color_ui
         )
-        # ctk.set_appearance_mode("light")
+        ctk.set_appearance_mode("light")
         self.database = self.load_database()
         self.assistant = assist.LogicalAssist(self.database)
         self.message_frame = main_window.MessageFrame(self)
@@ -32,6 +32,7 @@ class App(ctk.CTk):
         self.action_frame.place(relx=0, rely=0.9, relheight=0.1, relwidth=1)
 
         self.message_frame.bind("<<UserQuery>>", self.respond_user)
+        
     def load_database(self):
         with open("info.json", 'r', encoding="utf-8") as file:
             info_dictionary = json.load(file)
@@ -51,21 +52,19 @@ class App(ctk.CTk):
             sticky="e"
         )
         self.message_frame.add_message(user_message)
-        self.message_frame._scrollbar.set(start_value=0.9, end_value=1)
 
     def respond_user(self, event):
         command = self.assistant.get_keyword_query()
-        print(command)
         if not command:
             # assist_message = self.assistant.not_recognized()
-            self.add_assist_message(text = "No reconocido")
+            self.add_assist_message("No reconocido")
             return
         self.assistant.access_to(command)
         if self.assistant.is_menu():
             self.add_assist_message(self.assistant.current_directory.get(cf.PRESENTATION_KEY), optionable=False)
             self.add_assist_message(self.assistant.get_list_menu(), optionable=True)
         elif self.assistant.is_concept():
-            self.add_assist_message(self.assistant.current_directory.get(cf.CONTENT_KEY), self.assistant.current_directory.get(cf.IMAGES_KEY), optionable=False)
+            self.add_assist_message(self.assistant.current_directory.get(cf.CONTENT_KEY), images=self.assistant.current_directory.get(cf.IMAGES_KEY), optionable=False)
         elif self.assistant.is_question():
             pass
 
@@ -84,6 +83,5 @@ class App(ctk.CTk):
             sticky="ew"
         )
         self.message_frame.add_message(assist_message)
-        self.message_frame._scrollbar.set(start_value=0.9, end_value=1)
 
 App()
