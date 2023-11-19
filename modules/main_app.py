@@ -32,6 +32,7 @@ class App(ctk.CTk):
         self.action_frame.place(relx=0, rely=0.9, relheight=0.1, relwidth=1)
 
         self.message_frame.bind("<<UserQuery>>", self.respond_user)
+        self.mainloop()
         
     def load_database(self):
         with open("info.json", 'r', encoding="utf-8") as file:
@@ -83,5 +84,3 @@ class App(ctk.CTk):
             sticky="ew"
         )
         self.message_frame.add_message(assist_message)
-
-App()

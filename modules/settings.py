@@ -14,4 +14,5 @@ IMAGES_KEY = "Imágenes"
 IMAGES_PATH = "imgs"
 
 # IMAGES
-MICROPHONE_IMAGE = IMAGES_PATH + "/" + "microphone.png"
+MICROPHONE_IMAGE = IMAGES_PATH + "/" + "microphone_icon.png"
+KEYBOARD_IMAGE = IMAGES_PATH + "/" + "keyboard_icon.png"

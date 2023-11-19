@@ -98,13 +98,13 @@ class ImageFrame(ctk.CTkFrame):
                 fg_color=("#dcdcdc", "#2b2b2b")
         )
         self.image_label.pack(side="top")
-        print("ctklbal without image done")
         self.show_current_image()
 
         # buttons
         self.prev_button = ctk.CTkButton(
             master = self, 
-            text = "Previous",
+            text = "<",
+            text_color = cf.MESSAGE_COLOR_LIGHT,
             corner_radius = 15,
             fg_color = ("#dcdcdc", "#2b2b2b"),
             command = self.show_prev_image
@@ -113,7 +113,8 @@ class ImageFrame(ctk.CTkFrame):
 
         self.next_button = ctk.CTkButton(
             master = self,
-            text = "Next",
+            text = ">",
+            text_color = cf.MESSAGE_COLOR_LIGHT,
             command = self.show_next_image
         )
         self.next_button.pack(side=tk.RIGHT)
@@ -123,13 +124,10 @@ class ImageFrame(ctk.CTkFrame):
 
     def show_current_image(self):
         current_image = Image.open(self.image_paths[self.current_index])
-        current_image = self.resize_ctk_image(current_image)
-        current_ctk_image = ctk.CTkImage(
-            light_image = current_image
+        current_ctk_image = self.resize_ctk_image(current_image)
+        self.image_label.configure(
+            image = current_ctk_image
         )
-        self.image_label.pack_forget()
-        self.image_label._image = current_ctk_image
-        self.image_label.pack(side="top")
 
     def resize_ctk_image(self, open_image):
         real_w, real_h = open_image.size
@@ -137,7 +135,11 @@ class ImageFrame(ctk.CTkFrame):
         print(window_height)
         image_height = window_height * 0.4
         image_width = real_w * (image_height / real_h)
-        return open_image.resize((int(image_width), int(image_height)))
+        current_ctk_image = ctk.CTkImage(
+            light_image = open_image,
+            size = (image_width, image_height)
+        )
+        return current_ctk_image
     
     def show_prev_image(self):
         # Decrement the index
@@ -169,20 +171,20 @@ class ActionFrame(ctk.CTkFrame):
         self.columnconfigure((1, 3), weight=3, uniform="a")
         self.rowconfigure(0, weight=1)
         self.micro_image = ctk.CTkImage(light_image = Image.open(cf.MICROPHONE_IMAGE))
+        self.keyboard_image = ctk.CTkImage(light_image = Image.open(cf.KEYBOARD_IMAGE))
         self.voice_button = ctk.CTkButton(
             master = self,
-            text = "O",
             fg_color = (cf.BG_COLOR_LIGHT, cf.BG_COLOR_DARK),
             hover_color = (cf.MESSAGE_COLOR_LIGHT, cf.MESSAGE_COLOR_DARK),
-            image = ctk.CTkImage(light_image = Image.open(cf.MICROPHONE_IMAGE)),
+            image = self.micro_image,
             corner_radius = 999,
             command = self.active_micro
         )
         self.keyboard_button = ctk.CTkButton(
             master = self,
-            text = "T",
             fg_color = (cf.BG_COLOR_LIGHT, cf.BG_COLOR_DARK),
             hover_color = (cf.MESSAGE_COLOR_LIGHT, cf.MESSAGE_COLOR_DARK),
+            image = self.keyboard_image,
             corner_radius = 999,
             command = self.active_keyboard
         )
@@ -260,26 +262,3 @@ class ActionFrame(ctk.CTkFrame):
             pady = 10,
             sticky = "nsew"
         )
-
-class ImageDisplay(ctk.CTkImage):
-    def __init__(self, parent, image_path = ""):
-        # defining values
-        self.open_image = None
-        self.image_tk = None
-        self.image_width = None
-        self.image_height = None
-        try:
-            self.open_image = Image.open("imgs/" + str(image_path))
-            self.image_width, self.image_height = parent.resize_image(self.open_image)
-            print(self.image_height, self.image_width)
-            super().__init__(
-                light_image = self.open_image,
-                size=(int(self.image_width), int(self.image_height))
-            )
-        except Exception as e:
-            print("Error loading image:", str(e))
-        # self.image_tk = ctk.CTkImage(
-        #     light_image = self.open_image,
-        #     dark_image = self.open_image,
-        #     size=(self.image_width, self.image_height)
-        # )
