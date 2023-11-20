@@ -28,21 +28,24 @@ class App(ctk.CTk):
         self.action_frame._canvas.bind("<<DoneQuery>>", self.add_user_message)
         self.action_frame.place(relx=0, rely=0.9, relheight=0.1, relwidth=1)
 
-        self.message_frame.bind("<<UserQuery>>", self.respond_user)
+        self.action_frame._canvas.bind("<<MicrophoneOn>>", self.active_micro_voice)
 
-        self.assistant = assist.LogicalAssist(self.database, hear_func = self.action_frame.hearing_button, stop_func = self.action_frame.recognized_button)
-        self.add_assist_message(self.assistant.current_directory.get(cf.PRESENTATION_KEY), optionable=False)
-        self.add_assist_message(self.assistant.get_list_menu(), optionable=True)
+        self.message_frame.bind("<<UserQuery>>", self.respond_user)
+        self.assistant = assist.LogicalAssist(self, self.database)
+        self.add_assist_message(["Hola. Soy tu Asistente Virtual. Fui creada para instruirte todo respecto a la Estructura de un computador. Antes de empezar ¿Podrias decirme tu nombre?"])
         self.mainloop()
         
     def load_database(self):
         with open("info.json", 'r', encoding="utf-8") as file:
             info_dictionary = json.load(file)
         return info_dictionary
+
+    def active_micro_voice(self, event):
+        self.action_frame.query = self.assistant.recognize_voice()
+        self.action_frame._canvas.event_generate("<<DoneQuery>>")
     
     def add_user_message(self, event):
         self.assistant.query = self.action_frame.query
-        print(self.assistant.query)
         user_message = main_window.UserMessage(
             parent = self.message_frame,
             text = self.assistant.query
@@ -56,11 +59,17 @@ class App(ctk.CTk):
         self.message_frame.add_message(user_message)
 
     def respond_user(self, event):
+        if cf.USERNAME == "Usuario":
+            cf.USERNAME = self.assistant.query
+            self.add_assist_message(["Mucho gusto " + str(cf.USERNAME) + "."])
+            self.add_assist_message(self.assistant.current_directory.get(cf.PRESENTATION_KEY))
+            self.add_assist_message(self.assistant.get_list_menu(), optionable=True)
+            return
         command = self.assistant.get_keyword_query()
         command = self.assistant.recognize_global_commands(command)
         if not command:
             # assist_message = self.assistant.not_recognized()s
-            self.add_assist_message("No reconocido")
+            self.add_assist_message(["No reconocido"])
             return
         self.assistant.access_to(command)
         if self.assistant.is_menu():
@@ -76,7 +85,7 @@ class App(ctk.CTk):
             parent = self.message_frame,
             root = self,
             images = images,
-            text = assist_message,
+            text_list = assist_message,
             is_menu = optionable
         )
         assist_message.grid(
@@ -85,4 +94,6 @@ class App(ctk.CTk):
             columnspan=2,
             sticky="ew"
         )
+        self.update()
+        assist_message.speak_sentences()
         self.message_frame.add_message(assist_message)

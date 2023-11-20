@@ -1,7 +1,6 @@
 {
     "Presentación":
     [
-        "Hola. Soy tu Asistente Virtual. Fui creada para instruirte todo respecto a la Estructura de un computador. Antes de empezar ¿Podrias decirme tu nombre?",
         "{username} Ahora voy a explicarte sobre las opciones que tiene este programa. Tienes 3 opciones para escoger.",
         "La opción Aprendizaje es donde podrás aprender todo con respecto a la {topic}.",
         "La opción Tests es donde podrás poner en práctica lo que aprendiste mediante exámenes.",

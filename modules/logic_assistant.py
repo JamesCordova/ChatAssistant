@@ -4,12 +4,12 @@ from . import settings as cf
 
 
 class LogicalAssist():
-    def __init__(self, database, hear_func = None, stop_func = None):
+    def __init__(self, root, database, hear_func = None, stop_func = None):
+        self.root = root
         self.database = database
         self.current_directory = self.database
         self.hear_func = hear_func
         self.stop_func = stop_func
-        self.username = "Usuario"
         self.global_commands = {
             "Salir": exit,
             "salir": exit,
@@ -36,12 +36,10 @@ class LogicalAssist():
     def access_to(self, command_key):
         if command_key:
             pre_directory = self.is_menu().get(command_key.capitalize())
-            print(pre_directory)
         if pre_directory:
             self.global_commands["Regresar"] = self.current_directory
             self.global_commands["regresar"] = self.current_directory
             self.current_directory = pre_directory
-        print(self.current_directory)
         return self.current_directory
 
     def recognize_global_commands(self, command):
@@ -52,8 +50,8 @@ class LogicalAssist():
         if type(func) is dict:
             self.current_directory = func
             return "None is valid"
-        elif func.lower() == "salir":
-            return exit(0)
+        elif callable(func):
+            return func(0)
         else:
             return command
 
@@ -74,7 +72,8 @@ class LogicalAssist():
                 return key
             
         return None
-
+    
+    @staticmethod
     def text_to_voice(sentence):
         answer = pyttsx3.init()
         answer.say(sentence)
@@ -86,30 +85,22 @@ class LogicalAssist():
         query = ""
         microphone = speech_recognition.Microphone()
         voice_recognizer = speech_recognition.Recognizer()
-        if self.hear_func:
-            self.hear_func()
-            print("calling other method")
-
         # Use microphone as source
         try:
             with microphone as source:
                 voice_recognizer.adjust_for_ambient_noise(source)
-                print("Escuchando...")
-                if self.hear_func:
-                    self.hear_func()
-                    print("calling other method")
+                self.root.action_frame.hearing_button()
+                self.root.update()
                 audio = voice_recognizer.listen(source, None)
         except:
             print("No se pudo acceder al micrófono")
-            query = input()
-            return query
+            self.query = input()
+            return self.query
 
         # Recognize speech using Google Speech Recognition
         try:
-            print("Reconociendo...")
-            if self.stop_func:
-                print("calling other method")
-                self.stop_func()
+            self.root.action_frame.default_button()
+            self.root.update()
             query = voice_recognizer.recognize_google(audio, language='es-PE')
             print(f"Has dicho {query}\n")
             return query
@@ -119,5 +110,5 @@ class LogicalAssist():
 
         except speech_recognition.UnknownValueError:
             print("Algo no está bien. No puedo reconocer tu micrófono o no lo tienes enchufado")
-
-        return query
+        self.query = input()
+        return self.query

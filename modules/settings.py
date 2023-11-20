@@ -1,3 +1,7 @@
+# NAMES
+USERNAME = "Usuario"
+TOPIC = "Ejecución de instrucciones"
+
 # STYLES
 BG_COLOR_LIGHT = "#ebebeb"
 BG_COLOR_DARK = "#242424"
@@ -15,7 +19,8 @@ IMAGES_PATH = "imgs"
 SOUNDS_PATH = "sounds"
 
 # MULTIMEDIA
-MICROPHONE_IMAGE = IMAGES_PATH + "/" + "microphone_icon.png"
+MICROPHONE_OFF_IMAGE = IMAGES_PATH + "/" + "microphone_off_icon.png"
+MICROPHONE_ON_IMAGE = IMAGES_PATH + "/" + "microphone_on_icon.png"
 KEYBOARD_IMAGE = IMAGES_PATH + "/" + "keyboard_icon.png"
 ARROW_IMAGE = IMAGES_PATH + "/" + "arrow_head_icon.png"
 HEARING_GIF = IMAGES_PATH + "/" + "hear_animation.gif"

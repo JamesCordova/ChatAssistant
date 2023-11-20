@@ -1,8 +1,11 @@
 import tkinter as tk
+import threading
+import pyttsx3
 from tkinter import ttk
 import customtkinter as ctk
 from PIL import Image, ImageOps, ImageSequence
 from . import settings as cf
+from . import logic_assistant as assist
 
 class MessageFrame(ctk.CTkScrollableFrame):
     def __init__(self, parent):
@@ -13,7 +16,7 @@ class MessageFrame(ctk.CTkScrollableFrame):
             scrollbar_button_hover_color = (cf.MESSAGE_COLOR_LIGHT, cf.MESSAGE_COLOR_DARK),
             height=0
         )
-
+        self.root = parent
         self.columnconfigure((0,1), weight = 1, uniform = "a")
         self.columnconfigure((2), weight = 2, uniform = "a")
         rows = tuple(range(16))
@@ -25,47 +28,55 @@ class MessageFrame(ctk.CTkScrollableFrame):
         pass
 
     def add_message(self, widget):
-        # if len(self.messages) > self.max_rows:
-        #     self.messages.pop(0)
-        #     return widget
         self.messages.append(widget)
         self.current_row += 1
         self._scrollbar.set(start_value=0.9, end_value=1)
         if type(widget) is UserMessage:
             self.event_generate("<<UserQuery>>")
-        print()
         return widget
 
 class AssistMessage(ctk.CTkFrame):
-    def __init__(self, parent, root, images = [], text = "", is_menu = False):
+    def __init__(self, parent, root, images = [], text_list = [], is_menu = False):
         super().__init__(
             master = parent,
             fg_color="transparent"
         )
         self.current_images = []
-        self.string_message = ""
+        self.text_var = tk.StringVar()
+        self.sentence_list = text_list
+        self.current_index = 0
+        self.text_var.set("")
         self.is_menu = is_menu
-        print(text)
-        if self.is_menu:
-            for i, option in enumerate(text, start = 1):
-                self.string_message += f"{str(i)}) {option.capitalize()}\n"
-        elif type(text) is list:
-            for sentence in text:
-                self.string_message += f"{sentence} "
-        else:
-            self.string_message = text
-
             
         self.message = ctk.CTkLabel(
             master = self,
-            text = self.string_message,
+            textvariable = self.text_var,
             corner_radius = 15,
             fg_color=("#dcdcdc", "#2b2b2b"),
             wraplength = 400,
             justify="left"
         )
-        self.message.pack(anchor="w", pady=5, ipadx=5, ipady=10)
+        self.message.pack(anchor="w", pady=5, ipadx=2, ipady=10)
+        root.update_idletasks()
 
+        # if self.is_menu:
+        #     for i, option in enumerate(text, start = 1):
+        #         formatted_text = str(f"{str(i)}) {option.capitalize()}\n").format(username = cf.USERNAME, topic = cf.TOPIC)
+        #         self.string_message.set(self.string_message.get() + formatted_text)
+        #         root.update()
+        #         threading.Thread(target = assist.LogicalAssist.text_to_voice(formatted_text)).start()
+        # elif type(text) is list:
+        #     for sentence in text:
+        #         formatted_text = sentence.format(username = cf.USERNAME, topic = cf.TOPIC)
+        #         self.string_message.set(self.string_message.get() + f"{formatted_text} ")
+        #         root.update()
+        #         threading.Thread(target = assist.LogicalAssist.text_to_voice(formatted_text)).start()
+        # else:
+        #     self.string_message.set(text)
+        #     root.update()
+        #     threading.Thread(target = assist.LogicalAssist.text_to_voice(text)).start()
+
+        self.engine = pyttsx3.init()
         if images:
             self.image_message = ImageFrame(
                 parent = self,
@@ -73,6 +84,28 @@ class AssistMessage(ctk.CTkFrame):
                 images = images
             )
             self.image_message.pack(anchor="nw", pady=5, expand = True, fill = "both")
+    
+    def speak_sentences(self):
+       self.speak_next_sentence()
+
+    def speak_next_sentence(self):
+        if self.sentence_list and self.current_index < len(self.sentence_list):
+            if self.is_menu:
+                current_sentence = str(f"{str(self.current_index + 1)}) {self.sentence_list[self.current_index].capitalize()}\n").format(username = cf.USERNAME, topic = cf.TOPIC)
+            else:
+                current_sentence = str(self.sentence_list[self.current_index] + " ").format(username = cf.USERNAME, topic = cf.TOPIC)
+            self.text_var.set(self.text_var.get() + current_sentence)  # Set the text before speaking
+            self.current_index += 1
+            self.speak_text(current_sentence)
+            # job = threading.Thread(target=self.speak_text(current_sentence))
+            # job.start()
+            # job.join()
+        
+    def speak_text(self, text):
+        self.engine.say(text)
+        self.engine.runAndWait()
+        
+        self.master.root.after(1000, self.speak_next_sentence)
 
 class UserMessage(ctk.CTkFrame):
     def __init__(self, parent, text = ""):
@@ -80,8 +113,19 @@ class UserMessage(ctk.CTkFrame):
             master = parent,
             fg_color="transparent"
         )
-        self.message = ctk.CTkLabel(self, corner_radius=15, text = text, fg_color=(cf.MESSAGE_COLOR_LIGHT, cf.MESSAGE_COLOR_DARK))
-        self.message.pack(anchor="e", pady=5)
+        self.message = ctk.CTkLabel(
+            master = self,
+            corner_radius = 15,
+            text = text,
+            wraplength = 400,
+            justify = "right",
+            fg_color = (cf.MESSAGE_COLOR_LIGHT, cf.MESSAGE_COLOR_DARK))
+        self.message.pack(
+            ipadx=2,
+            ipady=5,
+            anchor="e",
+            pady=5
+        )
         pass
 
 
@@ -138,6 +182,8 @@ class ImageFrame(ctk.CTkFrame):
             image = self.left_arrow,
             compound = "left",
             corner_radius = 15,
+            border_width = 0,
+            border_spacing = 0,
             hover_color = (cf.MESSAGE_COLOR_LIGHT, cf.MESSAGE_COLOR_DARK),
             fg_color = ("#dcdcdc", "#2b2b2b"),
             bg_color = ("#dcdcdc", "#2b2b2b"),
@@ -171,7 +217,6 @@ class ImageFrame(ctk.CTkFrame):
     def resize_ctk_image(self, open_image):
         real_w, real_h = open_image.size
         window_height = self.root.winfo_height()
-        print(window_height)
         image_height = window_height * 0.4
         image_width = real_w * (image_height / real_h)
         current_ctk_image = ctk.CTkImage(
@@ -210,14 +255,15 @@ class ActionFrame(ctk.CTkFrame):
         self.columnconfigure((1, 3), weight=3, uniform="a")
         self.rowconfigure(0, weight=1)
         self.current_frame = 0
-        self.micro_image = ctk.CTkImage(light_image = Image.open(cf.MICROPHONE_IMAGE))
+        self.micro_off_image = ctk.CTkImage(light_image = Image.open(cf.MICROPHONE_OFF_IMAGE))
+        self.micro_on_image = ctk.CTkImage(light_image = Image.open(cf.MICROPHONE_ON_IMAGE))
         self.keyboard_image = ctk.CTkImage(light_image = Image.open(cf.KEYBOARD_IMAGE))
         self.voice_button = ctk.CTkButton(
             master = self,
             text = "",
             fg_color = (cf.BG_COLOR_LIGHT, cf.BG_COLOR_DARK),
             hover_color = (cf.MESSAGE_COLOR_LIGHT, cf.MESSAGE_COLOR_DARK),
-            image = self.micro_image,
+            image = self.micro_off_image,
             compound = "top",
             corner_radius = 999,
             command = self.active_micro
@@ -245,8 +291,7 @@ class ActionFrame(ctk.CTkFrame):
 
     def active_micro(self):
         if self.micro_mode:
-            self.query = self.parent.assistant.recognize_voice()
-            self._canvas.event_generate("<<DoneQuery>>")
+            self._canvas.event_generate("<<MicrophoneOn>>")
             pass
         self.keyboard_button.grid_forget()
         self.text_input.grid_forget()
@@ -254,29 +299,14 @@ class ActionFrame(ctk.CTkFrame):
         self.micro_mode = True
 
     def hearing_button(self):
-        self.gif_frames = [ctk.CTkImage(frame) for frame in ImageSequence.Iterator(Image.open(cf.HEARING_GIF))]
-        print("No error")
-        self.update_gif()
-
-    def update_gif(self):
-        # Display the current frame
         self.voice_button.configure(
-            image = self.gif_frames[self.current_frame]
+            image = self.micro_on_image
         )
 
-        # Move to the next frame
-        self.current_frame += 1
-        if self.current_frame == len(self.gif_frames):
-            self.current_frame = 0
-
-        if True:
-            self.parent.after(100, self.update_gif)
-
-    def recognized_button(self):
-        # self.voice_button.configure(
-        #     image = self.micro_image
-        # )
-        pass
+    def default_button(self):
+        self.voice_button.configure(
+            image = self.micro_off_image
+        )
 
     def active_keyboard(self):
         self.keyboard_button.grid_forget()
