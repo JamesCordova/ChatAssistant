@@ -4,12 +4,10 @@ from . import settings as cf
 
 
 class LogicalAssist():
-    def __init__(self, root, database, hear_func = None, stop_func = None):
+    def __init__(self, root, database):
         self.root = root
         self.database = database
         self.current_directory = self.database
-        self.hear_func = hear_func
-        self.stop_func = stop_func
         self.global_commands = {
             "Salir": exit,
             "salir": exit,

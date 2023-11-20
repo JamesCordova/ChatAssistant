@@ -136,7 +136,7 @@ class ImageFrame(ctk.CTkFrame):
         self.image_label.place(
             relx = 0,
             rely = 0,
-            relwidth = 0.9,
+            relwidth = 0.91,
             relheight = 1,
         )
         self.show_current_image()
@@ -149,8 +149,8 @@ class ImageFrame(ctk.CTkFrame):
         
 
     def show_current_image(self):
-        current_image = Image.open(self.image_paths[self.current_index])
-        current_ctk_image = self.resize_ctk_image(current_image)
+        self.current_image = Image.open(self.image_paths[self.current_index])
+        current_ctk_image = self.resize_ctk_image(self.current_image)
         self.image_label.configure(
             image = current_ctk_image
         )
@@ -173,9 +173,9 @@ class ImageFrame(ctk.CTkFrame):
             command = self.show_prev_image
         )
         self.prev_button.place(
-            relx = 0.9,
+            relx = 0.915,
             rely = 0,
-            relwidth = 0.1,
+            relwidth = 0.085,
             relheight = 0.1
         )
 
@@ -191,9 +191,9 @@ class ImageFrame(ctk.CTkFrame):
             command = self.show_next_image
         )
         self.next_button.place(
-            relx = 0.9,
+            relx = 0.915,
             rely = 0.9,
-            relwidth = 0.1,
+            relwidth = 0.085,
             relheight = 0.1
         )
 
@@ -205,7 +205,7 @@ class ImageFrame(ctk.CTkFrame):
             image_width = real_w * (image_height / real_h)
         else:
             window_width = self.root.winfo_width()
-            image_width = window_width * 0.9
+            image_width = window_width * 0.5
             image_height = real_h * (image_width / real_w)
         current_ctk_image = ctk.CTkImage(
             light_image = open_image,
@@ -266,7 +266,7 @@ class ActionFrame(ctk.CTkFrame):
         )
         self.text_input = ctk.CTkEntry(
             master = self,
-            corner_radius = 25,
+            corner_radius = 20,
             placeholder_text = "Escribe tu petición",
             fg_color = "transparent"
         )

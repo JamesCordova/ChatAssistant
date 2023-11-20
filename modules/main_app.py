@@ -13,6 +13,7 @@ class App(ctk.CTk):
         self.color_ui = (cf.BG_COLOR_DARK, cf.BG_COLOR_LIGHT)
         self.geometry("600x720")
         self.minsize(600,720)
+        self.maxsize(600,1010)
         self.configure(
             background = self.color_ui
         )
