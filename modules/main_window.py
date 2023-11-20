@@ -3,7 +3,7 @@ import threading
 import pyttsx3
 from tkinter import ttk
 import customtkinter as ctk
-from PIL import Image, ImageOps, ImageSequence
+from PIL import Image, ImageOps
 from . import settings as cf
 from . import logic_assistant as assist
 
@@ -57,24 +57,7 @@ class AssistMessage(ctk.CTkFrame):
             justify="left"
         )
         self.message.pack(anchor="w", pady=5, ipadx=2, ipady=10)
-        root.update_idletasks()
-
-        # if self.is_menu:
-        #     for i, option in enumerate(text, start = 1):
-        #         formatted_text = str(f"{str(i)}) {option.capitalize()}\n").format(username = cf.USERNAME, topic = cf.TOPIC)
-        #         self.string_message.set(self.string_message.get() + formatted_text)
-        #         root.update()
-        #         threading.Thread(target = assist.LogicalAssist.text_to_voice(formatted_text)).start()
-        # elif type(text) is list:
-        #     for sentence in text:
-        #         formatted_text = sentence.format(username = cf.USERNAME, topic = cf.TOPIC)
-        #         self.string_message.set(self.string_message.get() + f"{formatted_text} ")
-        #         root.update()
-        #         threading.Thread(target = assist.LogicalAssist.text_to_voice(formatted_text)).start()
-        # else:
-        #     self.string_message.set(text)
-        #     root.update()
-        #     threading.Thread(target = assist.LogicalAssist.text_to_voice(text)).start()
+        root.update()
 
         self.engine = pyttsx3.init()
         if images:
@@ -96,9 +79,9 @@ class AssistMessage(ctk.CTkFrame):
                 current_sentence = str(self.sentence_list[self.current_index] + " ").format(username = cf.USERNAME, topic = cf.TOPIC)
             self.text_var.set(self.text_var.get() + current_sentence)  # Set the text before speaking
             self.current_index += 1
-            self.speak_text(current_sentence)
-            # job = threading.Thread(target=self.speak_text(current_sentence))
-            # job.start()
+            # job = threading.Thread(target=self.speak_text(current_sentence)) # dont work
+            job = threading.Thread(target=self.speak_text, args=(current_sentence,))
+            job.start()
             # job.join()
         
     def speak_text(self, text):
@@ -151,9 +134,9 @@ class ImageFrame(ctk.CTkFrame):
                 fg_color=("#dcdcdc", "#2b2b2b")
         )
         self.image_label.place(
-            relx = 0,
+            relx = 0.05,
             rely = 0,
-            relwidth = 1,
+            relwidth = 0.9,
             relheight = 1,
         )
         self.show_current_image()
@@ -216,9 +199,14 @@ class ImageFrame(ctk.CTkFrame):
 
     def resize_ctk_image(self, open_image):
         real_w, real_h = open_image.size
-        window_height = self.root.winfo_height()
-        image_height = window_height * 0.4
-        image_width = real_w * (image_height / real_h)
+        if real_w > real_h:
+            window_height = self.root.winfo_height()
+            image_height = window_height * 0.4
+            image_width = real_w * (image_height / real_h)
+        else:
+            window_width = self.root.winfo_width()
+            image_width = window_width * 0.9
+            image_height = real_h * (image_width / real_w)
         current_ctk_image = ctk.CTkImage(
             light_image = open_image,
             size = (image_width, image_height)
@@ -254,7 +242,6 @@ class ActionFrame(ctk.CTkFrame):
         self.columnconfigure((0, 2, 4), weight=1, uniform="a")
         self.columnconfigure((1, 3), weight=3, uniform="a")
         self.rowconfigure(0, weight=1)
-        self.current_frame = 0
         self.micro_off_image = ctk.CTkImage(light_image = Image.open(cf.MICROPHONE_OFF_IMAGE))
         self.micro_on_image = ctk.CTkImage(light_image = Image.open(cf.MICROPHONE_ON_IMAGE))
         self.keyboard_image = ctk.CTkImage(light_image = Image.open(cf.KEYBOARD_IMAGE))
@@ -279,7 +266,7 @@ class ActionFrame(ctk.CTkFrame):
         )
         self.text_input = ctk.CTkEntry(
             master = self,
-            corner_radius = 20,
+            corner_radius = 25,
             placeholder_text = "Escribe tu petición",
             fg_color = "transparent"
         )

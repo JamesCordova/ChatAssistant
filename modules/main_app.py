@@ -11,22 +11,32 @@ class App(ctk.CTk):
         super().__init__()
         self.title("Asistente")
         self.color_ui = (cf.BG_COLOR_DARK, cf.BG_COLOR_LIGHT)
-        self.geometry("600x500")
-        self.minsize(600,500)
+        self.geometry("600x720")
+        self.minsize(600,720)
         self.configure(
             background = self.color_ui
         )
         # ctk.set_appearance_mode("light")
         self.database = self.load_database()
         self.message_frame = main_window.MessageFrame(self)
-        self.message_frame.place(relx=0, rely=0, relheight=0.9, relwidth=1)
+        self.message_frame.place(
+            relx = 0,
+            rely = 0,
+            relheight = 0.92,
+            relwidth = 1
+        )
         # self.response_frame = ctk.CTkFrame(self)
         # self.response_frame.place(relx=0, rely=0.9, relheight=0.1, relwidth=1)
 
         self.user_messsage = None
         self.action_frame = main_window.ActionFrame(self)
         self.action_frame._canvas.bind("<<DoneQuery>>", self.add_user_message)
-        self.action_frame.place(relx=0, rely=0.9, relheight=0.1, relwidth=1)
+        self.action_frame.place(
+            relx = 0,
+            rely = 0.92,
+            relheight = 0.08,
+            relwidth = 1
+        )
 
         self.action_frame._canvas.bind("<<MicrophoneOn>>", self.active_micro_voice)
 
