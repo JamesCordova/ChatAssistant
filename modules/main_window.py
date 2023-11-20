@@ -134,7 +134,7 @@ class ImageFrame(ctk.CTkFrame):
                 fg_color=("#dcdcdc", "#2b2b2b")
         )
         self.image_label.place(
-            relx = 0.05,
+            relx = 0,
             rely = 0,
             relwidth = 0.9,
             relheight = 1,
@@ -156,45 +156,45 @@ class ImageFrame(ctk.CTkFrame):
         )
     def place_navigation_buttons(self):
         default_arrow = Image.open(cf.ARROW_IMAGE)
-        mirror_arrow = ImageOps.mirror(default_arrow)
-        self.right_arrow = ctk.CTkImage(light_image = default_arrow)
-        self.left_arrow = ctk.CTkImage(light_image = mirror_arrow)
+        flip_arrow = ImageOps.flip(default_arrow)
+        self.left_arrow = ctk.CTkImage(light_image = default_arrow)
+        self.right_arrow = ctk.CTkImage(light_image = flip_arrow)
         self.prev_button = ctk.CTkButton(
             master = self,
             text = "",
             image = self.left_arrow,
-            compound = "left",
+            compound = "top",
             corner_radius = 15,
             border_width = 0,
             border_spacing = 0,
             hover_color = (cf.MESSAGE_COLOR_LIGHT, cf.MESSAGE_COLOR_DARK),
             fg_color = ("#dcdcdc", "#2b2b2b"),
-            bg_color = ("#dcdcdc", "#2b2b2b"),
+            bg_color = "transparent",
             command = self.show_prev_image
         )
         self.prev_button.place(
-            relx = 0,
-            rely = 0.4,
-            relwidth = 0.05,
-            relheight = 0.2
+            relx = 0.9,
+            rely = 0,
+            relwidth = 0.1,
+            relheight = 0.1
         )
 
         self.next_button = ctk.CTkButton(
             master = self,
             text = "",
             image = self.right_arrow,
-            compound = "right",
+            compound = "bottom",
             corner_radius = 15,
             hover_color = (cf.MESSAGE_COLOR_LIGHT, cf.MESSAGE_COLOR_DARK),
             fg_color = ("#dcdcdc", "#2b2b2b"),
-            bg_color = ("#dcdcdc", "#2b2b2b"),
+            bg_color = "transparent",
             command = self.show_next_image
         )
         self.next_button.place(
-            relx = 0.95,
-            rely = 0.4,
-            relwidth = 0.05,
-            relheight = 0.2
+            relx = 0.9,
+            rely = 0.9,
+            relwidth = 0.1,
+            relheight = 0.1
         )
 
     def resize_ctk_image(self, open_image):
