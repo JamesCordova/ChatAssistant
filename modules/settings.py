@@ -19,6 +19,7 @@ IMAGES_PATH = "imgs"
 SOUNDS_PATH = "sounds"
 
 # MULTIMEDIA
+ASSIST_ICON_IMAGE = IMAGES_PATH + "/" + "assist_icon.png"
 MICROPHONE_OFF_IMAGE = IMAGES_PATH + "/" + "microphone_off_icon.png"
 MICROPHONE_ON_IMAGE = IMAGES_PATH + "/" + "microphone_on_icon.png"
 KEYBOARD_IMAGE = IMAGES_PATH + "/" + "keyboard_icon.png"

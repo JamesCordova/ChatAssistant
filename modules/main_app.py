@@ -1,5 +1,6 @@
 import tkinter as tk
-from tkinter import ttk
+import ctypes
+from PIL import Image, ImageTk
 import customtkinter as ctk
 from . import main_window
 from . import settings as cf
@@ -11,6 +12,14 @@ class App(ctk.CTk):
         super().__init__()
         self.title("Asistente")
         self.color_ui = (cf.BG_COLOR_DARK, cf.BG_COLOR_LIGHT)
+        
+        # setting the icons 
+        icon_ctk = ImageTk.PhotoImage(file = cf.ASSIST_ICON_IMAGE)
+        self.wm_iconbitmap()
+        self.iconphoto(False, icon_ctk)
+        self.myappid = "personal.assistant.chat.1"
+        ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(self.myappid)
+
         self.geometry("600x720")
         self.minsize(600,720)
         self.maxsize(600,1010)
