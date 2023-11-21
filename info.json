@@ -174,18 +174,19 @@
         },
         "Test":
         {
-            "PREGUNTA 1": {
-                "pregunta": ["La fase de decodificación en la ejecución de una instrucción de un computador suele ser más corta que un ciclo de la señal de reloj."],
-                "alternativas": 
+            "Preguntas": [
+                {
+                "Pregunta": ["La fase de decodificación en la ejecución de una instrucción de un computador suele ser más corta que un ciclo de la señal de reloj."],
+                "Opciones": 
                 {
                     "Verdadero": 0, 
                     "Falso": 1
                 },
                 "respuesta": ["Falso"]
             },
-            "PREGUNTA 2": {
-                "pregunta": ["En la ejecución de instrucciones, ¿Qué función desempeña el registro MAR (Memory Address Register)?"],
-                "alternativas": 
+            {
+                "Pregunta": ["En la ejecución de instrucciones, ¿Qué función desempeña el registro MAR (Memory Address Register)?"],
+                "Opciones": 
                 {
                     "Almacena el resultado de una operación aritmética": 0,
                     "Guarda la instrucción actual a ejecutar": 0 ,
@@ -194,9 +195,9 @@
                 },
                 "respuesta": ["Contiene la dirección de memoria que se leerá o escribirá"]
             },
-            "PREGUNTA 3": {
-                "pregunta": ["En la ejecución de instrucciones, ¿Cuál es la función principal de la unidad de control de la CPU?"],
-                "alternativas": 
+            {
+                "Pregunta": ["En la ejecución de instrucciones, ¿Cuál es la función principal de la unidad de control de la CPU?"],
+                "Opciones": 
                 {
                     "Realizar cálculos matemáticos y operaciones aritméticas": 0,
                     "Almacenar temporalmente los resultados de las instrucciones": 0,
@@ -205,18 +206,18 @@
                 },
                 "respuesta": ["Interpretar y ejecutar las instrucciones del programa"]
             },
-            "PREGUNTA 4": {
-                "pregunta": ["Durante la fase de \"Ejecución\" de una instrucción, se realizan operaciones aritméticas, lógicas o de transferencia de datos, y se generan los resultados de acuerdo con la operación especificada."],
-                "alternativas": 
+            {
+                "Pregunta": ["Durante la fase de \"Ejecución\" de una instrucción, se realizan operaciones aritméticas, lógicas o de transferencia de datos, y se generan los resultados de acuerdo con la operación especificada."],
+                "Opciones": 
                 {
                     "Verdadero": 1,
                     "Falso": 0
                 },
                 "respuesta": ["Verdadero"]
             },
-            "PREGUNTA 5": {
-                "pregunta": ["En la fase de \"Almacenamiento\" del ciclo de procesamiento de una instrucción en una CPU, ¿Cuál de las siguientes actividades puede llevarse a cabo?"],
-                "alternativas":
+            {
+                "Pregunta": ["En la fase de \"Almacenamiento\" del ciclo de procesamiento de una instrucción en una CPU, ¿Cuál de las siguientes actividades puede llevarse a cabo?"],
+                "Opciones":
                 {
                     "Actualización del estado de los registros": 1,
                     "Decodificación de la instrucción": 0,
@@ -225,9 +226,9 @@
                 },
                 "respuesta": ["Actualización del estado de los registros"]
             },
-            "PREGUNTA 6": {
-                "pregunta": ["¿Cuál es el tercer paso en la fase de búsqueda de una CPU?"],
-                "alternativas": 
+            {
+                "Pregunta": ["¿Cuál es el tercer paso en la fase de búsqueda de una CPU?"],
+                "Opciones": 
                 {
                     "Transferir dirección de memoria al registro de programa": 0, 
                     "Acceso a la memoria": 1,
@@ -236,9 +237,9 @@
                 },
                 "respuesta": ["Acceso a la memoria"]
             },
-            "PREGUNTA 7": {
-                "pregunta": ["¿Qué se almacena en el registro de instrucción (IR) durante la fase de búsqueda?"],
-                "alternativas":
+            {
+                "Pregunta": ["¿Qué se almacena en el registro de instrucción (IR) durante la fase de búsqueda?"],
+                "Opciones":
                 {
                     "La dirección de memoria actual": 0,
                     "La parte alta de la instrucción": 1,
@@ -247,9 +248,9 @@
                 },
                 "respuesta": ["La parte alta de la instrucción"]
             },
-            "PREGUNTA 8": {
-                "pregunta": ["¿Cuál es el propósito de la \"Fase de búsqueda de operandos\" en el ciclo de ejecución de una instrucción en una CPU?"],
-                "alternativas":
+            {
+                "Pregunta": ["¿Cuál es el propósito de la \"Fase de búsqueda de operandos\" en el ciclo de ejecución de una instrucción en una CPU?"],
+                "Opciones":
                 {
                     "Almacenar la dirección de memoria en el registro MAR": 0,
                     "Cargar el operando de memoria en el registro MDR": 1,
@@ -258,9 +259,9 @@
                 },
                 "respuesta": ["Cargar el operando de memoria en el registro MDR"]
             },
-            "PREGUNTA 9": {
-                "pregunta": ["¿Qué función realiza la fase de \"Búsqueda de Operandos\" en la ejecución de una instrucción en una computadora?"],
-                "alternativas":
+            {
+                "Pregunta": ["¿Qué función realiza la fase de \"Búsqueda de Operandos\" en la ejecución de una instrucción en una computadora?"],
+                "Opciones":
                 {
                     "Decodificar la instrucción": 0,
                     "Leer la instrucción desde la memoria": 0,
@@ -269,18 +270,18 @@
                 },
                 "respuesta": ["Obtener los operandos necesarios para la instrucción"]
             },
-            "PREGUNTA 10": {
-                "pregunta": ["En la fase de ejecución y almacenamiento del resultado,¿La ALU es la que hace operaciones aritméticas sin necesidad de alguna otra señal?"],
-                "alternativas":
+            {
+                "Pregunta": ["En la fase de ejecución y almacenamiento del resultado,¿La ALU es la que hace operaciones aritméticas sin necesidad de alguna otra señal?"],
+                "Opciones":
                 {
                     "Verdadero": 0,
                     "Falso": 1
                 },
                 "respuesta": ["Falso"]
             },
-            "PREGUNTA 11": {
-                "pregunta": ["¿Cuál es el propósito principal de la instrucción SW #456 en una arquitectura de procesador?"],
-                "alternativas":
+            {
+                "Pregunta": ["¿Cuál es el propósito principal de la instrucción SW #456 en una arquitectura de procesador?"],
+                "Opciones":
                 {
                     "Realizar una suma de dos números": 0,
                     "Escribir el dato contenido en el acumulador en una dirección de memoria específica": 1,
@@ -289,9 +290,9 @@
                 },
                 "respuesta": ["Escribir el dato contenido en el acumulador en una dirección de memoria específica"]
             },
-            "PREGUNTA 12": {
-                "pregunta": ["¿Cuántos bits se utilizan para indicar la dirección de memoria en la instrucción SW #456?"],
-                "alternativas":
+            {
+                "Pregunta": ["¿Cuántos bits se utilizan para indicar la dirección de memoria en la instrucción SW #456?"],
+                "Opciones":
                 {
                     "Cuatro bits": 0,
                     "Ocho bits": 0,
@@ -300,9 +301,9 @@
                 },
                 "respuesta": ["Doce bits"]
             },
-            "PREGUNTA 13": {
-                "pregunta": ["¿Qué función realiza la fase de \"Búsqueda de Operandos\" en la ejecución de una instrucción en una computadora?"],
-                "alternativas":
+            {
+                "Pregunta": ["¿Qué función realiza la fase de \"Búsqueda de Operandos\" en la ejecución de una instrucción en una computadora?"],
+                "Opciones":
                 {
                     "Decodificar la instrucción": 0,
                     "Leer la instrucción desde la memoria": 0,
@@ -311,34 +312,34 @@
                 },
                 "respuesta": ["Obtener los operandos necesarios para la instrucción"]
             },
-            "PREGUNTA 14": {
-                "pregunta": ["En una instrucción JMZ #456, el programa saltará a la dirección de memoria \"#456\" si el indicador de cero (Z) en el registro de estado está activo."],
-                "alternativas":
+            {
+                "Pregunta": ["En una instrucción JMZ #456, el programa saltará a la dirección de memoria \"#456\" si el indicador de cero (Z) en el registro de estado está activo."],
+                "Opciones":
                 {
                     "Verdadero": 1,
                     "Falso": 0
                 },
                 "respuesta": ["Verdadero"]
             },
-            "PREGUNTA 15": {
-                "pregunta": ["Una de las características de la ejecución de la instrucción JMZ #456 a diferencia de la instrucción SW #456 es que no realiza una bifurcación condicional utilizando direccionamiento directo ¿Verdadero o falso?"],
-                "alternativas":
+            {
+                "Pregunta": ["Una de las características de la ejecución de la instrucción JMZ #456 a diferencia de la instrucción SW #456 es que no realiza una bifurcación condicional utilizando direccionamiento directo ¿Verdadero o falso?"],
+                "Opciones":
                 {
                     "Verdadero": 0,
                     "Falso": 1
                 },
                 "respuesta": ["Falso"]
             },
-            "PREGUNTA 16": {
-                "pregunta": ["En una instrucción JMZ #456, el programa saltará a la dirección de memoria \"#456\" si el indicador de cero (Z) en el registro de estado está activo."],
-                "alternativas":
+            {
+                "Pregunta": ["En una instrucción JMZ #456, el programa saltará a la dirección de memoria \"#456\" si el indicador de cero (Z) en el registro de estado está activo."],
+                "Opciones":
                 {
                     "Verdadero": 1,
                     "Falso": 0
                 },
                 "respuesta": ["Verdadero"]
             }
-        },
+        ]},
         "Juegos":
         {
 

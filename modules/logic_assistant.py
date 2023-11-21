@@ -7,7 +7,13 @@ class LogicalAssist():
     def __init__(self, root, database):
         self.root = root
         self.database = database
+        # self.current_directory = {
+        #     "Solicitud": ["Hola. Soy tu Asistente Virtual. Fui creada para instruirte todo respecto a la Estructura de un computador.", "Antes de empezar ¿Podrias decirme tu nombre?"],
+        #     "Ejecución de instrucciones": self.database
+        # }
         self.current_directory = self.database
+        self.index_question = 0
+        self.current_question = None
         self.global_commands = {
             "Salir": exit,
             "salir": exit,
@@ -32,6 +38,7 @@ class LogicalAssist():
         return list(self.current_directory.get(cf.OPTIONS_KEY).keys())
 
     def access_to(self, command_key):
+        pre_directory = None
         if command_key:
             pre_directory = self.is_menu().get(command_key.capitalize())
         if pre_directory:
@@ -52,6 +59,9 @@ class LogicalAssist():
             return func(0)
         else:
             return command
+        
+    def is_request(self):
+        return self.current_directory.get(cf.REQUEST_KEY)
 
     def is_concept(self):
         return self.current_directory.get(cf.CONTENT_KEY)
@@ -60,12 +70,15 @@ class LogicalAssist():
         return self.current_directory.get(cf.OPTIONS_KEY)
     
     def is_question(self):
-        return self.current_directory.get("Test")
+        questions =  self.current_directory.get(cf.QUESTION_KEY)
+        if questions and self.index_question < len(questions):
+            self.current_question = questions[self.index_question]
+        return questions
     
-    def get_keyword_query(self):
-        if not self.is_menu():
+    def get_keyword_query(self, current_directory):
+        if not current_directory.get(cf.OPTIONS_KEY):
             return
-        for key in self.is_menu():
+        for key in current_directory.get(cf.OPTIONS_KEY):
             if key.lower() in self.query.lower():
                 return key
             

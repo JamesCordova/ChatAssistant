@@ -23,7 +23,7 @@ class MessageFrame(ctk.CTkScrollableFrame):
         self.rowconfigure(rows, weight = 2)
         self.max_rows = 10
         self.messages = []
-        self.current_message = ctk.CTkLabel(self)
+        self.current_message = UserMessage(self)
         self.current_row = 0
 
         pass
@@ -32,10 +32,9 @@ class MessageFrame(ctk.CTkScrollableFrame):
         self.messages.append(widget)
         self.current_row += 1
         self._scrollbar.set(start_value=0.9, end_value=1)
+        self.current_message = widget
         if type(widget) is UserMessage:
             self.event_generate("<<UserQuery>>")
-        else:
-            self.current_message = widget
         return widget
 
 class AssistMessage(ctk.CTkFrame):
@@ -89,8 +88,8 @@ class AssistMessage(ctk.CTkFrame):
         # job.join()
         
     def speak_text(self, text):
-        self.engine.say(text)
-        self.engine.runAndWait()
+        # self.engine.say(text)
+        # self.engine.runAndWait()
         self.speak_next_sentence()
         # self.master.root.after(500, self.speak_next_sentence)
 
@@ -100,6 +99,7 @@ class UserMessage(ctk.CTkFrame):
             master = parent,
             fg_color="transparent"
         )
+        self.responding = False
         self.message = ctk.CTkLabel(
             master = self,
             corner_radius = 15,
@@ -339,6 +339,8 @@ class ActionFrame(ctk.CTkFrame):
             self.update()
             return
         self.query = self.text_input.get()
+        if self.query == "" or self.query.isspace():
+            return
         self.text_input.delete(0,tk.END)
         self._canvas.event_generate("<<DoneQuery>>")
     

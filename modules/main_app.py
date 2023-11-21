@@ -1,6 +1,8 @@
 import tkinter as tk
 import ctypes
 from PIL import Image, ImageTk
+import threading
+import time
 import customtkinter as ctk
 from . import main_window
 from . import settings as cf
@@ -28,6 +30,7 @@ class App(ctk.CTk):
         )
         # ctk.set_appearance_mode("light")
         self.database = self.load_database()
+        self.advice_label = ctk.CTkLabel(master = self)
         self.message_frame = main_window.MessageFrame(self)
         self.message_frame.place(
             relx = 0,
@@ -52,7 +55,7 @@ class App(ctk.CTk):
 
         self.message_frame.bind("<<UserQuery>>", self.respond_user)
         self.assistant = assist.LogicalAssist(self, self.database)
-        self.add_assist_message(["Hola. Soy tu Asistente Virtual. Fui creada para instruirte todo respecto a la Estructura de un computador. Antes de empezar ¿Podrias decirme tu nombre?"])
+        self.add_assist_message(self.assistant.current_directory.get(cf.REQUEST_KEY))
         self.mainloop()
         
     def load_database(self):
@@ -81,32 +84,82 @@ class App(ctk.CTk):
         self.message_frame.add_message(user_message)
 
     def respond_user(self, event):
-        if cf.USERNAME == "Usuario":
-            cf.USERNAME = self.assistant.query
-            # self.add_assist_message(["Mucho gusto " + str(cf.USERNAME) + "."])
-            self.add_message_menu()
-            return
-        command = self.assistant.get_keyword_query()
-        command = self.assistant.recognize_global_commands(command)
-        if not command:
-            # assist_message = self.assistant.not_recognized()s
-            self.add_assist_message(["No reconocido"])
-            return
+        # if cf.USERNAME == "Usuario":
+        #     cf.USERNAME = self.assistant.query
+        #     # self.add_assist_message(["Mucho gusto " + str(cf.USERNAME) + "."])
+        #     self.add_message_menu()
+        #     return
+        # if self.assistant.is_question():
+        #     command = self.assistant.get_keyword_query(self.assistant.current_question)
+        #     self.assistant.index_question += 1
+        # else:
+        #     command = self.assistant.get_keyword_query(self.assistant.current_directory)
+        #     command = self.assistant.recognize_global_commands(command)
+        
+        # if self.assistant.current_question:
+        #     self.add_advice(self.assistant.current_question.get(cf.OPTIONS_KEY).get(command))
+        # else:
+        #     pass
+        # if not command:
+        #     # assist_message = self.assistant.not_recognized()
+        #     self.add_assist_message(["No reconocido"])
+        #     return
+        # self.assistant.access_to(command)
+
+        # self.assistant.query = ""
+        command = None
+        command = self.assistant.get_keyword_query(self.assistant.current_directory)
         self.assistant.access_to(command)
+
+        # Show interaction
         if self.assistant.is_menu():
             self.add_message_menu()
         elif self.assistant.is_concept():
-            self.add_assist_message(self.assistant.current_directory.get(cf.CONTENT_KEY), images=self.assistant.current_directory.get(cf.IMAGES_KEY), optionable=False)
+            self.add_assist_message(self.assistant.current_directory.get(cf.CONTENT_KEY), images=self.assistant.current_directory.get(cf.IMAGES_KEY))
         elif self.assistant.is_question():
+            if self.assistant.index_question > 0:
+                previous_question = self.assistant.is_question()[self.assistant.index_question - 1]
+                print(previous_question)
+                command = self.assistant.get_keyword_query(previous_question)
+                print(command)
+                self.add_advice(previous_question.get(cf.OPTIONS_KEY).get(command))
+            self.add_question()
+            self.assistant.index_question += 1
+            print("Hecho")
             pass
+        else:
+            print("nothing")
+    
+
+    def add_advice(self, is_correct):
+        if is_correct:
+            self.message_frame.current_message.message.configure(
+                fg_color = (cf.SUCCESS_COLOR_LIGHT, cf.SUCCESS_COLOR_DARK)
+            )
+        else:
+            self.message_frame.current_message.message.configure(
+                fg_color = (cf.ERROR_COLOR_LIGHT, cf.ERROR_COLOR_DARK)
+            )
 
     def add_message_menu(self):
-        messages_list = []
+        message_to_speech = []
         menu = [f"\n{index + 1}) {item}" for index, item in enumerate(self.assistant.get_list_menu())]
-        messages_list = self.assistant.current_directory.get(cf.PRESENTATION_KEY)+ ["\n"] + menu
-        self.add_assist_message(messages_list)
+        message_to_speech = self.assistant.current_directory.get(cf.PRESENTATION_KEY)+ ["\n"] + menu
+        self.add_assist_message(message_to_speech)
     
-    def add_assist_message(self, assist_message, images = [], optionable = False):
+    def add_question(self):
+        if self.assistant.index_question >= len(self.assistant.current_directory.get(cf.QUESTION_KEY)):
+            print(self.assistant.current_directory)
+            return
+        current_question = self.assistant.current_question
+        question_message = []
+        statement = current_question.get(cf.STATEMENT_KEY)
+        alternatives = list(current_question.get(cf.OPTIONS_KEY).keys())
+        menu = [f"\n{index + 1}) {item}" for index, item in enumerate(alternatives)]
+        question_message = statement + ["\n"] + menu
+        self.add_assist_message(question_message)
+    
+    def add_assist_message(self, assist_message, images = [], is_advice = False, optionable = False):
         assist_message = main_window.AssistMessage(
             parent = self.message_frame,
             root = self,
@@ -116,10 +169,10 @@ class App(ctk.CTk):
         )
         assist_message.grid(
             row = self.message_frame.current_row,
-            column=0,
-            columnspan=2,
-            sticky="ew"
+            column = 0,
+            columnspan = 2,
+            sticky = "ew"
         )
-        self.update()
         assist_message.speak_sentences()
+        # self.update()
         self.message_frame.add_message(assist_message)

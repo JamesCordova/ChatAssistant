@@ -1,5 +1,5 @@
 # NAMES
-USERNAME = "Usuario"
+USERNAME = None
 TOPIC = "Ejecución de instrucciones"
 
 # STYLES
@@ -9,12 +9,19 @@ MESSAGE_COLOR_LIGHT = "#b4b4b4"
 MESSAGE_COLOR_DARK = "#3c3c3c"
 ERROR_COLOR_LIGHT = "#dc2626"
 ERROR_COLOR_DARK = "#dc2626"
+SUCCESS_COLOR_LIGHT = "#11a37f"
+SUCCESS_COLOR_DARK = "#11a37f"
 
 # DEFAULT KEYS
+REQUEST_KEY = "Solicitud"
 PRESENTATION_KEY = "Presentación"
 OPTIONS_KEY = "Opciones"
 CONTENT_KEY = "Contenido"
 IMAGES_KEY = "Imágenes"
+QUESTION_KEY = "Preguntas"
+
+# QUESTION STRUCTURE KEYS
+STATEMENT_KEY = "Pregunta"
 
 # PATHS
 IMAGES_PATH = "imgs"
