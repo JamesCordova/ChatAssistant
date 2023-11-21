@@ -22,7 +22,7 @@ class App(ctk.CTk):
 
         self.geometry("600x720")
         self.minsize(600,720)
-        self.maxsize(600,1010)
+        self.maxsize(840,1010)
         self.configure(
             background = self.color_ui
         )
@@ -61,6 +61,8 @@ class App(ctk.CTk):
         return info_dictionary
 
     def active_micro_voice(self, event):
+        if self.message_frame.current_message.responding:
+           return 
         self.action_frame.query = self.assistant.recognize_voice()
         self.action_frame._canvas.event_generate("<<DoneQuery>>")
     
@@ -81,9 +83,8 @@ class App(ctk.CTk):
     def respond_user(self, event):
         if cf.USERNAME == "Usuario":
             cf.USERNAME = self.assistant.query
-            self.add_assist_message(["Mucho gusto " + str(cf.USERNAME) + "."])
-            self.add_assist_message(self.assistant.current_directory.get(cf.PRESENTATION_KEY))
-            self.add_assist_message(self.assistant.get_list_menu(), optionable=True)
+            # self.add_assist_message(["Mucho gusto " + str(cf.USERNAME) + "."])
+            self.add_message_menu()
             return
         command = self.assistant.get_keyword_query()
         command = self.assistant.recognize_global_commands(command)
@@ -93,13 +94,18 @@ class App(ctk.CTk):
             return
         self.assistant.access_to(command)
         if self.assistant.is_menu():
-            self.add_assist_message(self.assistant.current_directory.get(cf.PRESENTATION_KEY), optionable=False)
-            self.add_assist_message(self.assistant.get_list_menu(), optionable=True)
+            self.add_message_menu()
         elif self.assistant.is_concept():
             self.add_assist_message(self.assistant.current_directory.get(cf.CONTENT_KEY), images=self.assistant.current_directory.get(cf.IMAGES_KEY), optionable=False)
         elif self.assistant.is_question():
             pass
 
+    def add_message_menu(self):
+        messages_list = []
+        menu = [f"\n{index + 1}) {item}" for index, item in enumerate(self.assistant.get_list_menu())]
+        messages_list = self.assistant.current_directory.get(cf.PRESENTATION_KEY)+ ["\n"] + menu
+        self.add_assist_message(messages_list)
+    
     def add_assist_message(self, assist_message, images = [], optionable = False):
         assist_message = main_window.AssistMessage(
             parent = self.message_frame,

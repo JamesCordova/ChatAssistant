@@ -23,6 +23,7 @@ class MessageFrame(ctk.CTkScrollableFrame):
         self.rowconfigure(rows, weight = 2)
         self.max_rows = 10
         self.messages = []
+        self.current_message = ctk.CTkLabel(self)
         self.current_row = 0
 
         pass
@@ -33,6 +34,8 @@ class MessageFrame(ctk.CTkScrollableFrame):
         self._scrollbar.set(start_value=0.9, end_value=1)
         if type(widget) is UserMessage:
             self.event_generate("<<UserQuery>>")
+        else:
+            self.current_message = widget
         return widget
 
 class AssistMessage(ctk.CTkFrame):
@@ -42,6 +45,7 @@ class AssistMessage(ctk.CTkFrame):
             fg_color="transparent"
         )
         self.current_images = []
+        self.responding = True
         self.text_var = tk.StringVar()
         self.sentence_list = text_list
         self.current_index = 0
@@ -72,23 +76,23 @@ class AssistMessage(ctk.CTkFrame):
        self.speak_next_sentence()
 
     def speak_next_sentence(self):
-        if self.sentence_list and self.current_index < len(self.sentence_list):
-            if self.is_menu:
-                current_sentence = str(f"{str(self.current_index + 1)}) {self.sentence_list[self.current_index].capitalize()}\n").format(username = cf.USERNAME, topic = cf.TOPIC)
-            else:
-                current_sentence = str(self.sentence_list[self.current_index] + " ").format(username = cf.USERNAME, topic = cf.TOPIC)
-            self.text_var.set(self.text_var.get() + current_sentence)  # Set the text before speaking
-            self.current_index += 1
-            # job = threading.Thread(target=self.speak_text(current_sentence)) # dont work
-            job = threading.Thread(target=self.speak_text, args=(current_sentence,))
-            job.start()
-            # job.join()
+        if not(self.sentence_list and self.current_index < len(self.sentence_list)):
+            self.responding = False
+            self.master.event_generate("<<AvailableInput>>")
+            return
+        
+        current_sentence = str(self.sentence_list[self.current_index] + " ").format(username = cf.USERNAME, topic = cf.TOPIC)
+        self.text_var.set(self.text_var.get() + current_sentence)  # Set the text before speaking
+        self.current_index += 1
+        job = threading.Thread(target=self.speak_text, args=(current_sentence,))
+        job.start()
+        # job.join()
         
     def speak_text(self, text):
         self.engine.say(text)
         self.engine.runAndWait()
-        
-        self.master.root.after(1000, self.speak_next_sentence)
+        self.speak_next_sentence()
+        # self.master.root.after(500, self.speak_next_sentence)
 
 class UserMessage(ctk.CTkFrame):
     def __init__(self, parent, text = ""):
@@ -201,7 +205,7 @@ class ImageFrame(ctk.CTkFrame):
         real_w, real_h = open_image.size
         if real_w > real_h:
             window_height = self.root.winfo_height()
-            image_height = window_height * 0.4
+            image_height = window_height * 0.3
             image_width = real_w * (image_height / real_h)
         else:
             window_width = self.root.winfo_width()
@@ -264,24 +268,39 @@ class ActionFrame(ctk.CTkFrame):
             corner_radius = 999,
             command = self.active_keyboard
         )
-        self.text_input = ctk.CTkEntry(
+        self.text_frame = ctk.CTkFrame(
             master = self,
+            fg_color = "transparent"
+        )
+        self.text_input = ctk.CTkEntry(
+            master = self.text_frame,
             corner_radius = 20,
             placeholder_text = "Escribe tu petición",
             fg_color = "transparent"
         )
+        self.error_label = ctk.CTkLabel(
+            master = self.text_frame,
+            text = "!",
+            corner_radius = 50,
+            fg_color = (cf.ERROR_COLOR_LIGHT, cf.ERROR_COLOR_DARK)
+        )
         self.text_input.bind("<Return>", self.send_text_query)
+        self.parent.message_frame.bind("<<AvailableInput>>", self.active_input)
         self.query = None
         self.micro_mode = True
 
         self.grid_buttons()
 
     def active_micro(self):
+        if self.parent.message_frame.current_message.responding:
+            self.voice_button.configure(
+                image = ctk.CTkImage(light_image = Image.open(cf.MICROPHONE_DISABLE_IMAGE))
+            )
+            return
         if self.micro_mode:
             self._canvas.event_generate("<<MicrophoneOn>>")
-            pass
-        self.keyboard_button.grid_forget()
-        self.text_input.grid_forget()
+            return
+        self.text_frame.grid_forget()
         self.grid_buttons()
         self.micro_mode = True
 
@@ -310,6 +329,15 @@ class ActionFrame(ctk.CTkFrame):
         self.micro_mode = False
     
     def send_text_query(self, event):
+        if self.parent.message_frame.current_message.responding:
+            self.error_label.place(
+                relx = 0.935,
+                rely = 0.222,
+                relwidth = 0.04,
+                relheight = 0.6
+            )
+            self.update()
+            return
         self.query = self.text_input.get()
         self.text_input.delete(0,tk.END)
         self._canvas.event_generate("<<DoneQuery>>")
@@ -320,7 +348,7 @@ class ActionFrame(ctk.CTkFrame):
             column = 2,
             padx = 10,
             pady = 10,
-            sticky = "nsew"            
+            sticky = "nsew"
         )
         self.keyboard_button.grid(
             row = 0,
@@ -330,12 +358,24 @@ class ActionFrame(ctk.CTkFrame):
             sticky = "nsew"            
         )
     
+    def active_input(self,event):
+        self.voice_button.configure(
+            image = self.micro_off_image
+        )
+        self.error_label.place_forget()
+
     def grid_text(self):
-        self.text_input.grid(
+        self.text_frame.grid(
             row = 0,
             column = 0,
             columnspan = 4,
             padx = 10,
             pady = 10,
-            sticky = "nsew"
+            sticky = "ew"
+        )
+        self.text_input.place(
+            relx = 0,
+            rely = 0,
+            relheight = 1,
+            relwidth = 1
         )
