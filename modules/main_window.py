@@ -116,6 +116,127 @@ class UserMessage(ctk.CTkFrame):
         )
         pass
 
+class HangGame(ctk.CTkFrame):
+    def __init__(self, parent, word):
+        super().__init__(
+            master = parent,
+            corner_radius = 15,
+            fg_color=("#dcdcdc", "#2b2b2b")
+        )
+
+        self.hidden_string_variable = tk.StringVar()
+        self.secret_word = word
+        self.attempts = 6
+        self.guessed_letters = []
+        self.hidden_string_variable.set(self.text_to_display())
+        self.responding = True
+        self.label = ctk.CTkLabel(
+            master = self,
+            textvariable = self.hidden_string_variable,
+            corner_radius = 15,
+            font = ("Arial", 40),
+            fg_color=("#dcdcdc", "#2b2b2b")
+        )
+        self.label.place(
+            relx = 0.5,
+            rely = 0.5,
+            anchor = "center"
+
+        )
+        self.info_label = ctk.CTkLabel(
+            master = self,
+            text = "Ya has dicho esa letra",
+            corner_radius = 15,
+            fg_color = (cf.ERROR_COLOR_LIGHT, cf.ERROR_COLOR_DARK)
+        )
+        self.attempts_frame = ctk.CTkFrame(
+            master = self,
+            fg_color = "transparent"
+        )
+        self.attempts_labels = []
+        self.attempts_frame.place(
+            relx = 0.5,
+            rely = 0.1,
+            anchor = "center"
+        )
+        self.place_attempts()
+        self.input = ctk.CTkEntry(
+            master = self,
+            corner_radius = 15,
+            fg_color=("#dcdcdc", "#2b2b2b")
+        )
+        self.input.place(
+            relx = 0.5,
+            rely = 0.9,
+            anchor = "center"
+        )
+        self.input.bind("<Return>", self.guess_letter)
+
+    def place_attempts(self):
+        for i in range(self.attempts):
+            attempt_label = ctk.CTkLabel(
+                master = self.attempts_frame,
+                text = "!",
+                corner_radius = 50,
+                fg_color = (cf.SUCCESS_COLOR_LIGHT, cf.SUCCESS_COLOR_DARK)
+            )
+            attempt_label.pack(
+                side = "left",
+                padx = 5,
+                pady = 5
+            )
+            self.attempts_labels.append(attempt_label)
+    
+    def erase_attempt(self):
+        self.attempts_labels[self.attempts - 1].configure(
+            fg_color = (cf.ERROR_COLOR_LIGHT, cf.ERROR_COLOR_DARK)
+        )
+        self.attempts -= 1
+        if self.attempts == 0:
+            self.input.configure(
+                state = "disabled"
+            )
+            self.responding = False
+            self.master.event_generate("<<AvailableInput>>")
+    
+    def guess_letter(self, event):
+        self.info_label.place_forget()
+        letter = self.input.get()
+        self.input.delete(0, tk.END)
+        if letter == self.secret_word:
+            self.guessed_letters = list(letter)
+            str_guess = self.text_to_display()
+            self.hidden_string_variable.set(str_guess)
+            self.responding = False
+            self.master.event_generate("<<AvailableInput>>")
+            return
+        if letter in self.guessed_letters:
+            self.info_label.place(
+                relx = 0.5,
+                rely = 0.74,
+                anchor = "center"
+            )
+            return
+        self.guessed_letters.append(letter)
+        if letter in self.secret_word:
+            str_guess = self.text_to_display()
+            self.hidden_string_variable.set(str_guess)
+        else:
+            self.erase_attempt()
+        if not '_' in self.hidden_string_variable.get():
+            self.responding = False
+            self.master.event_generate("<<AvailableInput>>")
+
+    def text_to_display(self):
+        text = ""
+        for letter in self.secret_word:
+            if letter in self.guessed_letters:
+                text = text + letter + " "
+            else:
+                text += "_ "
+        return text
+
+
 
 class ImageFrame(ctk.CTkFrame):
     def __init__(self, parent, root, images = []):

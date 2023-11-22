@@ -427,52 +427,6 @@
                     "direccion",
                     "registro"
                 ]
-            },
-            "Memoria":{
-                "Presentación":
-                [
-                    "Bienvenido al juego de memoria, en este juego tendrás que recordar las palabras que se te muestran en pantalla.",
-                    "Tienes 5 intentos para recordar las palabras, si no lo logras, perderás el juego.",
-                    "¿Estás listo para jugar?"
-                ],
-                "Palabras":
-                [
-                    "computador",
-                    "memoria",
-                    "procesador",
-                    "instruccion",
-                    "registro",
-                    "almacenamiento",
-                    "ejecucion",
-                    "decodificacion",
-                    "lectura",
-                    "busqueda",
-                    "almacenamiento",
-                    "acumulador",
-                    "registro",
-                    "memoria",
-                    "programa",
-                    "instruccion",
-                    "operacion",
-                    "aritmetica",
-                    "logica",
-                    "transferencia",
-                    "datos",
-                    "resultado",
-                    "operacion",
-                    "almacenamiento",
-                    "instruccion",
-                    "acumulador",
-                    "memoria",
-                    "principal",
-                    "direccion",
-                    "registro",
-                    "instruccion",
-                    "acumulador",
-                    "memoria",
-                    "principal",
-                    "direccion"
-                ]
             }
         }
     }

@@ -77,7 +77,8 @@ class LogicalAssist():
     
     def is_question(self):
         questions =  self.current_directory.get(cf.QUESTION_KEY)
-        self.num_questions = len(questions)
+        if questions:
+            self.num_questions = len(questions)
         if questions and self.index_question < len(questions):
             self.current_question = questions[self.index_question]
         return questions

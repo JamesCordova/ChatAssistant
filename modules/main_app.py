@@ -1,8 +1,7 @@
 import tkinter as tk
 import ctypes
 from PIL import Image, ImageTk
-import threading
-import time
+import random
 import customtkinter as ctk
 from . import main_window
 from . import settings as cf
@@ -116,10 +115,8 @@ class App(ctk.CTk):
             self.assistant.index_question += 1
         elif self.assistant.is_images():
             self.add_images()
-        elif self.assistant.is_game():
-            pass
         else:
-            print("nothing")
+            self.add_game()
     
 
     def add_advice(self, is_correct):
@@ -132,6 +129,28 @@ class App(ctk.CTk):
             self.message_frame.current_message.message.configure(
                 fg_color = (cf.ERROR_COLOR_LIGHT, cf.ERROR_COLOR_DARK)
             )
+
+    def add_game(self):
+        self.add_assist_message(["Add message"], speechable=False)
+        game = main_window.HangGame(
+            parent = self.message_frame,
+            word = random.choice(self.assistant.current_directory.get("Ahorcado").get("Palabras"))
+
+        )
+        game.grid(
+            row = self.message_frame.current_row,
+            column = 0,
+            columnspan = 2,
+            sticky = "ew"
+        )
+        # game.place(
+        #     relx = 0,
+        #     rely = 0,
+        #     relwidth = 0.91,
+        #     relheight = 1,
+        # )      
+        self.message_frame.add_message(game)
+
 
     def add_images(self):
         images_list = []
