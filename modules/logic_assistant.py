@@ -19,6 +19,13 @@ class LogicalAssist():
             "Volver al inicio": self.database,
             "Regresar": self.database
         }
+        self.global_indexes = {
+            "Uno": 1,
+            "Dos": 2,
+            "Tres": 3,
+            "Cuatro": 4,
+            "Cinco": 5
+        }
         self.correct_answers = 0
         self.num_questions = 0
         self.query = None
@@ -85,6 +92,26 @@ class LogicalAssist():
             if key.lower() in self.query.lower():
                 return key
             
+        return None
+    
+    def get_keyword_by_number(self, command, current_directory):
+        options = current_directory.get(cf.OPTIONS_KEY)
+        if not options:
+            return
+        if command in list(options.keys()):
+            return command
+        index = self.global_indexes.get(self.get_keyword_in_dict(self.global_indexes))
+        if index and index <= len(list(options.keys())):
+            return list(options.keys())[index - 1]
+            
+        return None
+    
+    def get_keyword_in_dict(self, current_directory):
+        if type(current_directory) is not dict:
+            return
+        for key in current_directory.keys():
+            if key.lower() in self.query.lower():
+                return key
         return None
     
     @staticmethod

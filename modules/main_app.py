@@ -85,7 +85,7 @@ class App(ctk.CTk):
 
     def respond_user(self, event):
         if cf.USERNAME == None:
-            cf.USERNAME = self.assistant.query
+            cf.USERNAME = self.assistant.query.capitalize()
             # self.add_assist_message(["Mucho gusto " + str(cf.USERNAME) + "."])
             self.assistant.current_directory = self.assistant.database
             self.add_message_menu()
@@ -110,6 +110,7 @@ class App(ctk.CTk):
             if self.assistant.index_question > 0:
                 previous_question = self.assistant.is_question()[self.assistant.index_question - 1]
                 command = self.assistant.get_keyword_query(previous_question)
+                command = self.assistant.get_keyword_by_number(command, previous_question)
                 self.add_advice(previous_question.get(cf.OPTIONS_KEY).get(command))
             self.add_question()
             self.assistant.index_question += 1
