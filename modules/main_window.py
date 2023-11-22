@@ -88,8 +88,8 @@ class AssistMessage(ctk.CTkFrame):
         # job.join()
         
     def speak_text(self, text):
-        # self.engine.say(text)
-        # self.engine.runAndWait()
+        self.engine.say(text)
+        self.engine.runAndWait()
         self.speak_next_sentence()
         # self.master.root.after(500, self.speak_next_sentence)
 

@@ -84,32 +84,22 @@ class App(ctk.CTk):
         self.message_frame.add_message(user_message)
 
     def respond_user(self, event):
-        # if cf.USERNAME == "Usuario":
-        #     cf.USERNAME = self.assistant.query
-        #     # self.add_assist_message(["Mucho gusto " + str(cf.USERNAME) + "."])
-        #     self.add_message_menu()
-        #     return
-        # if self.assistant.is_question():
-        #     command = self.assistant.get_keyword_query(self.assistant.current_question)
-        #     self.assistant.index_question += 1
-        # else:
-        #     command = self.assistant.get_keyword_query(self.assistant.current_directory)
-        #     command = self.assistant.recognize_global_commands(command)
+        if cf.USERNAME == None:
+            cf.USERNAME = self.assistant.query
+            # self.add_assist_message(["Mucho gusto " + str(cf.USERNAME) + "."])
+            self.assistant.current_directory = self.assistant.database
+            self.add_message_menu()
+            return
         
-        # if self.assistant.current_question:
-        #     self.add_advice(self.assistant.current_question.get(cf.OPTIONS_KEY).get(command))
-        # else:
-        #     pass
-        # if not command:
-        #     # assist_message = self.assistant.not_recognized()
-        #     self.add_assist_message(["No reconocido"])
-        #     return
-        # self.assistant.access_to(command)
-
-        # self.assistant.query = ""
         command = None
+        global_command = None
         command = self.assistant.get_keyword_query(self.assistant.current_directory)
+        global_command = self.assistant.recognize_global_commands(command)
         self.assistant.access_to(command)
+
+        if not global_command:
+            self.add_assist_message(["No reconocido"])
+            return
 
         # Show interaction
         if self.assistant.is_menu():
@@ -119,13 +109,11 @@ class App(ctk.CTk):
         elif self.assistant.is_question():
             if self.assistant.index_question > 0:
                 previous_question = self.assistant.is_question()[self.assistant.index_question - 1]
-                print(previous_question)
                 command = self.assistant.get_keyword_query(previous_question)
-                print(command)
                 self.add_advice(previous_question.get(cf.OPTIONS_KEY).get(command))
             self.add_question()
             self.assistant.index_question += 1
-            print("Hecho")
+        elif self.assistant.is_game():
             pass
         else:
             print("nothing")
@@ -149,7 +137,9 @@ class App(ctk.CTk):
     
     def add_question(self):
         if self.assistant.index_question >= len(self.assistant.current_directory.get(cf.QUESTION_KEY)):
-            print(self.assistant.current_directory)
+            self.assistant.index_question = -1
+            self.assistant.current_directory = self.assistant.database
+            self.add_message_menu()
             return
         current_question = self.assistant.current_question
         question_message = []

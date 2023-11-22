@@ -7,20 +7,17 @@ class LogicalAssist():
     def __init__(self, root, database):
         self.root = root
         self.database = database
-        # self.current_directory = {
-        #     "Solicitud": ["Hola. Soy tu Asistente Virtual. Fui creada para instruirte todo respecto a la Estructura de un computador.", "Antes de empezar ¿Podrias decirme tu nombre?"],
-        #     "Ejecución de instrucciones": self.database
-        # }
-        self.current_directory = self.database
+        self.current_directory = {
+            "Solicitud": ["Hola. Soy tu Asistente Virtual. Fui creada para instruirte todo respecto a la Estructura de un computador.", "Antes de empezar ¿Podrias decirme tu nombre?"],
+            "Ejecución de instrucciones": self.database
+        }
+        # self.current_directory = self.database
         self.index_question = 0
         self.current_question = None
         self.global_commands = {
             "Salir": exit,
-            "salir": exit,
             "Volver al inicio": self.database,
-            "volver al inicio": self.database,
-            "Regresar": self.database,
-            "regresar": self.database
+            "Regresar": self.database
         }
         self.query = None
 
@@ -50,7 +47,7 @@ class LogicalAssist():
     def recognize_global_commands(self, command):
         func = ""
         for key in list(self.global_commands.keys()):
-            if key in self.query.lower():
+            if key.lower() in self.query.lower():
                 func = self.global_commands.get(key)
         if type(func) is dict:
             self.current_directory = func
