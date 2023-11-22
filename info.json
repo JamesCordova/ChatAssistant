@@ -149,28 +149,30 @@
                 }
             }
         },
-        "Imágenes":{
-            "Bienvenida": [],
-            "Conceptos generales":{
-                "Introducción": ["intro.png", "fases.png"],
-                "Lectura": ["lectura.jpg"],
-                "Decodificación": ["decodificacion.jpg"],
-                "Ejecución": ["ejecucion.jpg"],
-                "Almacenamiento": ["almacenamiento.jpg"]
-            },
-            "Cronograma instrucción add":{
-                "Fase de búsqueda": ["busqueda.png"],
-                "Fase de búsqueda de operandos": ["busqueda.png"],
-                "Fase de ejecución y almacenamiento": []
-            },
-            "Ejecución de la instrucción sw":
-            [
-                "sw.png"
-            ],
-            "Ejecución de instrucción jmz":
-            [
-                "jwz.png"
-            ]
+        "Multimedia":{
+            "Imágenes":{
+                "Bienvenida": [],
+                "Conceptos generales":{
+                    "Introducción": ["intro.png", "fases.png"],
+                    "Lectura": ["lectura.jpg"],
+                    "Decodificación": ["decodificacion.jpg"],
+                    "Ejecución": ["ejecucion.jpg"],
+                    "Almacenamiento": ["almacenamiento.jpg"]
+                },
+                "Cronograma instrucción add":{
+                    "Fase de búsqueda": ["busqueda.png"],
+                    "Fase de búsqueda de operandos": ["busqueda.png"],
+                    "Fase de ejecución y almacenamiento": []
+                },
+                "Ejecución de la instrucción sw":
+                [
+                    "sw.png"
+                ],
+                "Ejecución de instrucción jmz":
+                [
+                    "jwz.png"
+                ]
+            }
         },
         "Test":
         {

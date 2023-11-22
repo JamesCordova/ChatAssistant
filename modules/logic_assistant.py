@@ -71,6 +71,9 @@ class LogicalAssist():
         if questions and self.index_question < len(questions):
             self.current_question = questions[self.index_question]
         return questions
+
+    def is_images(self):
+        return self.current_directory.get(cf.IMAGES_KEY)
     
     def get_keyword_query(self, current_directory):
         if not current_directory.get(cf.OPTIONS_KEY):

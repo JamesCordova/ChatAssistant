@@ -113,6 +113,8 @@ class App(ctk.CTk):
                 self.add_advice(previous_question.get(cf.OPTIONS_KEY).get(command))
             self.add_question()
             self.assistant.index_question += 1
+        elif self.assistant.is_images():
+            self.add_images()
         elif self.assistant.is_game():
             pass
         else:
@@ -128,6 +130,31 @@ class App(ctk.CTk):
             self.message_frame.current_message.message.configure(
                 fg_color = (cf.ERROR_COLOR_LIGHT, cf.ERROR_COLOR_DARK)
             )
+
+    def add_images(self):
+        images_list = []
+        if type(self.assistant.is_images()) is list:
+            images_list = images_list + self.assistant.is_images()
+        else:
+            images_list = self.list_for_dictionary_values(self.assistant.is_images())
+        
+        self.add_assist_message(images = images_list)
+    
+    def list_for_dictionary_values(self, dictionary):
+        list_values = []
+        for value in dictionary.values():
+            if isinstance(value, dict):
+                list_values = list_values + self.list_for_dictionary_values(value)
+            elif isinstance(value, list):
+                for item in value:
+                    if isinstance(item, dict):
+                        list_values = list_values + self.list_for_dictionary_values(item)
+                    else:
+                        list_values.append(item)
+            else:
+                list_values.append(value)
+        
+        return list_values
 
     def add_message_menu(self):
         message_to_speech = []
@@ -149,7 +176,7 @@ class App(ctk.CTk):
         question_message = statement + ["\n"] + menu
         self.add_assist_message(question_message)
     
-    def add_assist_message(self, assist_message, images = [], is_advice = False, optionable = False):
+    def add_assist_message(self, assist_message = [], images = [], optionable = False):
         assist_message = main_window.AssistMessage(
             parent = self.message_frame,
             root = self,
