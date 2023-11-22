@@ -38,7 +38,7 @@ class MessageFrame(ctk.CTkScrollableFrame):
         return widget
 
 class AssistMessage(ctk.CTkFrame):
-    def __init__(self, parent, root, images = [], text_list = [], is_menu = False):
+    def __init__(self, parent, root, images = [], text_list = [], speechable = True):
         super().__init__(
             master = parent,
             fg_color="transparent"
@@ -49,7 +49,7 @@ class AssistMessage(ctk.CTkFrame):
         self.sentence_list = text_list
         self.current_index = 0
         self.text_var.set("")
-        self.is_menu = is_menu
+        self.speechable = speechable
             
         self.message = ctk.CTkLabel(
             master = self,
@@ -88,8 +88,9 @@ class AssistMessage(ctk.CTkFrame):
         # job.join()
         
     def speak_text(self, text):
-        self.engine.say(text)
-        self.engine.runAndWait()
+        if self.speechable:
+            self.engine.say(text)
+            self.engine.runAndWait()
         self.speak_next_sentence()
         # self.master.root.after(500, self.speak_next_sentence)
 

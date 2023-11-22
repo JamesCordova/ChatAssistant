@@ -97,7 +97,7 @@ class App(ctk.CTk):
         global_command = self.assistant.recognize_global_commands(command)
         self.assistant.access_to(command)
 
-        if not global_command:
+        if not global_command and not self.assistant.is_question():
             self.add_assist_message(["No reconocido"])
             return
 
@@ -126,6 +126,7 @@ class App(ctk.CTk):
             self.message_frame.current_message.message.configure(
                 fg_color = (cf.SUCCESS_COLOR_LIGHT, cf.SUCCESS_COLOR_DARK)
             )
+            self.assistant.correct_answers += 1
         else:
             self.message_frame.current_message.message.configure(
                 fg_color = (cf.ERROR_COLOR_LIGHT, cf.ERROR_COLOR_DARK)
@@ -166,23 +167,28 @@ class App(ctk.CTk):
         if self.assistant.index_question >= len(self.assistant.current_directory.get(cf.QUESTION_KEY)):
             self.assistant.index_question = -1
             self.assistant.current_directory = self.assistant.database
+            final_message = [f"Has acertado {self.assistant.correct_answers} de {self.assistant.num_questions}"]
+            self.assistant.correct_answers = 0
+            self.add_assist_message(final_message, speechable=False)
             self.add_message_menu()
             return
         current_question = self.assistant.current_question
         question_message = []
+        images_question = []
         statement = current_question.get(cf.STATEMENT_KEY)
         alternatives = list(current_question.get(cf.OPTIONS_KEY).keys())
         menu = [f"\n{index + 1}) {item}" for index, item in enumerate(alternatives)]
         question_message = statement + ["\n"] + menu
-        self.add_assist_message(question_message)
+        images_question = current_question.get(cf.IMAGES_KEY)
+        self.add_assist_message(question_message, images=images_question)
     
-    def add_assist_message(self, assist_message = [], images = [], optionable = False):
+    def add_assist_message(self, assist_message = [], images = [], speechable = True):
         assist_message = main_window.AssistMessage(
             parent = self.message_frame,
             root = self,
             images = images,
             text_list = assist_message,
-            is_menu = optionable
+            speechable = speechable
         )
         assist_message.grid(
             row = self.message_frame.current_row,
