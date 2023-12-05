@@ -55,6 +55,10 @@ class App(ctk.CTk):
         self.message_frame.bind("<<UserQuery>>", self.respond_user)
         self.assistant = assist.LogicalAssist(self, self.database)
         self.add_assist_message(self.assistant.current_directory.get(cf.REQUEST_KEY))
+
+
+        self.message_frame.bind("<<WinGame>>", self.render_again)
+
         self.mainloop()
         
     def load_database(self):
@@ -68,6 +72,10 @@ class App(ctk.CTk):
         self.action_frame.query = self.assistant.recognize_voice()
         self.action_frame._canvas.event_generate("<<DoneQuery>>")
     
+    def render_again(self, event):
+        self.assistant.current_directory = self.assistant.database
+        self.add_message_menu()
+
     def add_user_message(self, event):
         self.assistant.query = self.action_frame.query
         user_message = main_window.UserMessage(
@@ -138,7 +146,6 @@ class App(ctk.CTk):
         game = main_window.HangGame(
             parent = self.message_frame,
             word = secret_word
-
         )
         game.grid(
             row = self.message_frame.current_row,

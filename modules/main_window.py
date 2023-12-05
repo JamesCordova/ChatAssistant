@@ -208,7 +208,7 @@ class HangGame(ctk.CTkFrame):
             str_guess = self.text_to_display()
             self.hidden_string_variable.set(str_guess)
             self.responding = False
-            self.master.event_generate("<<AvailableInput>>")
+            self.won_game()
             return
         if letter in self.guessed_letters:
             self.info_label.place(
@@ -225,8 +225,13 @@ class HangGame(ctk.CTkFrame):
             self.erase_attempt()
         if not '_' in self.hidden_string_variable.get():
             self.responding = False
-            self.master.event_generate("<<AvailableInput>>")
+            self.wom_game()
 
+    def won_game(self):
+
+        self.master.event_generate("<<WinGame>>")
+        self.master.event_generate("<<AvailableInput>>")
+        
     def text_to_display(self):
         text = ""
         for letter in self.secret_word:
