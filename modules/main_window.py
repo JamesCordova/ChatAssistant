@@ -176,7 +176,7 @@ class HangGame(ctk.CTkFrame):
         for i in range(self.attempts):
             attempt_label = ctk.CTkLabel(
                 master = self.attempts_frame,
-                text = "!",
+                text = "",
                 corner_radius = 50,
                 fg_color = (cf.SUCCESS_COLOR_LIGHT, cf.SUCCESS_COLOR_DARK)
             )

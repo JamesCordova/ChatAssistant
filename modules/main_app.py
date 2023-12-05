@@ -131,10 +131,13 @@ class App(ctk.CTk):
             )
 
     def add_game(self):
-        self.add_assist_message(["Add message"], speechable=False)
+        variacion = random.choice(self.assistant.current_directory.get("Ahorcado").get("Variaciones"))
+        sentence = variacion.get("Enunciado")
+        secret_word = variacion.get("Palabra")[0]
+        self.add_assist_message(sentence, speechable=False)
         game = main_window.HangGame(
             parent = self.message_frame,
-            word = random.choice(self.assistant.current_directory.get("Ahorcado").get("Palabras"))
+            word = secret_word
 
         )
         game.grid(

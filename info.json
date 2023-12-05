@@ -352,80 +352,48 @@
                     "Tienes 5 intentos para adivinar la palabra, si no lo logras, perderás el juego.",
                     "¿Estás listo para jugar?"
                 ],
-                "Palabras":
+                "Variaciones":
                 [
-                    "computador",
-                    "memoria",
-                    "procesador",
-                    "instruccion",
-                    "registro",
-                    "almacenamiento",
-                    "ejecucion",
-                    "decodificacion",
-                    "lectura",
-                    "busqueda",
-                    "almacenamiento",
-                    "acumulador",
-                    "registro",
-                    "memoria",
-                    "programa",
-                    "instruccion",
-                    "operacion",
-                    "aritmetica",
-                    "logica",
-                    "transferencia",
-                    "datos",
-                    "resultado",
-                    "operacion",
-                    "almacenamiento",
-                    "instruccion",
-                    "acumulador",
-                    "memoria",
-                    "principal",
-                    "direccion",
-                    "registro",
-                    "instruccion",
-                    "acumulador",
-                    "memoria",
-                    "principal",
-                    "direccion",
-                    "registro",
-                    "instruccion",
-                    "acumulador",
-                    "memoria",
-                    "principal",
-                    "direccion",
-                    "registro",
-                    "instruccion",
-                    "acumulador",
-                    "memoria",
-                    "principal",
-                    "direccion",
-                    "registro",
-                    "instruccion",
-                    "acumulador",
-                    "memoria",
-                    "principal",
-                    "direccion",
-                    "registro",
-                    "instruccion",
-                    "acumulador",
-                    "memoria",
-                    "principal",
-                    "direccion",
-                    "registro",
-                    "instruccion",
-                    "acumulador",
-                    "memoria",
-                    "principal",
-                    "direccion",
-                    "registro",
-                    "instruccion",
-                    "acumulador",
-                    "memoria",
-                    "principal",
-                    "direccion",
-                    "registro"
+                    {
+                        "Enunciado": ["Se necesitan ________ para indicar la dirección de memoria en la instrucción SW #456"],
+                        "Palabra": ["doce"]
+                    },
+                    {
+                        "Enunciado": ["En la ejecución de instrucciones, la función principal de la unidad de control de la CPU es _________ y ejecutar las instrucciones del programa"],
+                        "Palabra": ["interpretar"]
+                    },
+                    {
+                        "Enunciado": ["El propósito principal de la instrucción SW #456 es escribir el dato contenido en el __________ en una dirección de memoria específica"],
+                        "Palabra": ["acumulador"]
+                    },
+                    {
+                        "Enunciado": ["En la ejecución de una instrucción en una computadora se debe obtener los _________ necesarios para la instrucción"],
+                        "Palabra": ["operandos"]
+                    },
+                    {
+                        "Enunciado": ["En la fase de ejecución y almacenamiento del resultado, la ALU es la que hace operaciones ___________ sin necesidad de alguna otra señal"],
+                        "Palabra": ["aritmeticas"]
+                    },
+                    {
+                        "Enunciado": ["La fase de ___________ en la ejecución de una instrucción de un computador suele ser más corta que un ciclo de la señal de reloj"],
+                        "Palabra": ["decodificacion"]
+                    },
+                    {
+                        "Enunciado": ["En la fase de decodificación, se determinan las ubicaciones de _________ o registros donde se encuentran los operandos."],
+                        "Palabra": ["memoria"]
+                    },
+                    {
+                        "Enunciado": ["Los resultados de la operación se almacenan en la ubicación adecuada, en la fase de ____________, la cual es la última"],
+                        "Palabra": ["almacenamiento"]
+                    },
+                    {
+                        "Enunciado": ["En la ejecución de la instrucción #JMZ se realiza una bifurcación condicional utilizando _____________ directo."],
+                        "Palabra": ["direccionamiento"]
+                    },
+                    {
+                        "Enunciado": ["Cada fase tiene una duración mayor que un ciclo de la señal de reloj y contiene una serie de operaciones básicas que pueden ejecutarse en _________ o en serie"],
+                        "Palabra": ["paralelo"]
+                    }
                 ]
             }
         }
