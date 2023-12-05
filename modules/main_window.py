@@ -130,14 +130,15 @@ class HangGame(ctk.CTkFrame):
         self.guessed_letters = []
         self.hidden_string_variable.set(self.text_to_display())
         self.responding = True
-        self.label = ctk.CTkLabel(
+        self.word_label = ctk.CTkLabel(
             master = self,
             textvariable = self.hidden_string_variable,
             corner_radius = 15,
+            pady = 20,
             font = ("Arial", 40),
             fg_color=("#dcdcdc", "#2b2b2b")
         )
-        self.label.place(
+        self.word_label.place(
             relx = 0.5,
             rely = 0.5,
             anchor = "center"
@@ -197,6 +198,10 @@ class HangGame(ctk.CTkFrame):
                 state = "disabled"
             )
             self.responding = False
+            self.word_label.configure(
+                fg_color=(cf.ERROR_COLOR_LIGHT, cf.ERROR_COLOR_DARK)
+            )
+            self.master.event_generate("<<WinGame>>")
             self.master.event_generate("<<AvailableInput>>")
     
     def guess_letter(self, event):
@@ -225,13 +230,15 @@ class HangGame(ctk.CTkFrame):
             self.erase_attempt()
         if not '_' in self.hidden_string_variable.get():
             self.responding = False
-            self.wom_game()
+            self.won_game()
 
     def won_game(self):
-
+        self.word_label.configure(
+            fg_color=(cf.SUCCESS_COLOR_LIGHT, cf.SUCCESS_COLOR_DARK)
+        )
         self.master.event_generate("<<WinGame>>")
         self.master.event_generate("<<AvailableInput>>")
-        
+
     def text_to_display(self):
         text = ""
         for letter in self.secret_word:
