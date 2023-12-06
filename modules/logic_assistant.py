@@ -152,5 +152,4 @@ class LogicalAssist():
 
         except speech_recognition.UnknownValueError:
             print("Algo no está bien. No puedo reconocer tu micrófono o no lo tienes enchufado")
-        self.query = input()
         return self.query

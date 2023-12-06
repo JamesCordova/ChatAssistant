@@ -388,7 +388,7 @@
                     },
                     {
                         "Enunciado": ["En la ejecución de la instrucción #JMZ se realiza una ___________ condicional utilizando direccionamiento directo."],
-                        "Palabra": ["bifuracion"]
+                        "Palabra": ["bifurcacion"]
                     },
                     {
                         "Enunciado": ["Cada fase tiene una duración mayor que un ciclo de la señal de reloj y contiene una serie de operaciones básicas que pueden ejecutarse en _________ o en serie"],

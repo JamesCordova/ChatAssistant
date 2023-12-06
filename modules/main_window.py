@@ -164,6 +164,7 @@ class HangGame(ctk.CTkFrame):
         self.input = ctk.CTkEntry(
             master = self,
             corner_radius = 15,
+            justify = "center",
             fg_color=("#dcdcdc", "#2b2b2b")
         )
         self.input.place(
@@ -206,6 +207,9 @@ class HangGame(ctk.CTkFrame):
     
     def guess_letter(self, event):
         self.info_label.place_forget()
+        self.info_label.configure(
+            text = "Ya has dicho esa letra"
+        )
         letter = self.input.get()
         self.input.delete(0, tk.END)
         if letter == self.secret_word:
@@ -215,6 +219,17 @@ class HangGame(ctk.CTkFrame):
             self.responding = False
             self.won_game()
             return
+        if len(letter) > 1:
+            self.info_label.configure(
+                text = "Ingresa solo una letra"
+            )
+            self.info_label.place(
+                relx = 0.5,
+                rely = 0.74,
+                anchor = "center"
+            )
+            return
+
         if letter in self.guessed_letters:
             self.info_label.place(
                 relx = 0.5,
