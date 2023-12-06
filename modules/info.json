@@ -1,0 +1,401 @@
+{
+    "Presentación":
+    [
+        "{username} Ahora voy a explicarte sobre las opciones que tiene este programa. Tienes 3 opciones para escoger.",
+        "La opción Aprendizaje es donde podrás aprender todo con respecto a la {topic}.",
+        "La opción Tests es donde podrás poner en práctica lo que aprendiste mediante exámenes.",
+        "Y por último, la tercer opción, es Juegos, donde tambien podrás demostrar lo que aprendiste jugando."
+    ],
+    "Opciones": 
+    {
+        "Aprendizaje": {
+            "Presentación": 
+            [
+                "Muy bien, empecemos entonces.",
+                "¿Qué escogerás primero?"
+            ],
+            "Opciones":
+            {
+                "Conceptos generales":
+                {
+                    "Presentación":
+                    [
+                        "¿Por cual deseas empezar?"
+                    ],
+                    "Opciones":
+                    {
+                        "Introducción": {
+                            "Contenido":
+                            [
+                                "Las instrucciones típicas que ejecuta un computador suelen dividirse en cuatro fases.",
+                                "Cada fase tiene una duración mayor que un ciclo de la señal de reloj y contiene una serie de operaciones básicas que pueden ejecutarse en paralelo o en serie.",
+                                "Las fases que componen una instrucción son:",
+                                "\n- Lectura",
+                                "\n- Decodificación",
+                                "\n- Ejecución",
+                                "\n- Almacenamiento"
+                            ],
+                            "Imágenes": ["intro.png", "fases.png"]
+                        },
+                        "Lectura": {
+                            "Contenido":
+                            [
+                                "La fase de lectura de instrucción es la primera fase del ciclo de instrucción de un procesador.",
+                                "En esta fase, el procesador busca la instrucción en la memoria.",
+                                "El primer paso es cargar el registro MAR con el contenido del registro PC.",
+                                "Luego, el procesador activa las señales de lectura de la memoria y guarda el dato en el registro MDR.",
+                                "Finalmente, el procesador transfiere el dato al registro IR.",
+                                "Este proceso se realiza dos veces en el ejemplo del computador porque las instrucciones son de 16 bits, mientras que los buses externos de datos y la memoria se consideran con una longitud de palabra de 8 bits."
+                            ],
+                            "Imágenes" :["lectura.jpg"]
+                        },
+                        "Decodificación": {
+                            "Contenido" :
+                            [
+                                "En esta fase, la CPU interpreta la instrucción almacenada en el registro IR.",
+                                "La decodificación implica entender que operación se debe realizar y qué datos se necesitan.",
+                                "Además, en esta etapa, se determinan las ubicaciones de memoria o registros donde se encuentran los operandos.",
+                                "La CPU puede cargar los operandos en registros internos para su posterior procesamiento."
+                            ],
+                            "Imágenes" : ["decodificacion.jpg"]
+                        },
+                        "Ejecución": {
+                            "Contenido" :
+                            [
+                                "Una vez que la CPU ha decodificado la instrucción y ha adquirido los operandos, se procede a realizar la operación indicada por la instrucción.",
+                                "Esto puede implicar operaciones aritméticas, lógicas o de transferencia de datos.",
+                                "En esta fase, los datos se procesan y se generan los resultados de acuerdo con la operación especificada."
+                            ],
+                            "Imágenes" : ["ejecucion.jpg"]
+                        },
+                        "Almacenamiento": {
+                            "Contenido": 
+                            [
+                                "Finalmente, en esta fase, los resultados de la operación se almacenan en la ubicación adecuada, que puede ser en la memoria, en registros internos o en otro lugar.",
+                                "Además, si es necesario actualizar el estado de los registros, se realiza en esta etapa.",
+                                "Esto asegura que los resultados estén disponibles para instrucciones posteriores o para la transferencia a dispositivos de salida, si es necesario."
+                            ],
+                            "Imágenes": ["almacenamiento.jpg"]
+                        }
+                    }
+                },
+                "Cronograma instrucción add":
+                {
+                    "Presentación":
+                    [
+                        "¿Por cual deseas empezar?"
+                    ],
+                    "Opciones":
+                    {
+                        "Fase de búsqueda": {
+                            "Contenido":
+                            [
+                                "Consta de 5 pasos: ",
+                                "1. Transferir dirección de memoria (MAR) al registro de programa (PC): La CPU necesita saber la dirección de la siguiente instrucción que se ejecutará.",
+                                "Para hacer esto, coloque la dirección almacenada en el Registro de programa (PC) en el Registro de direcciones de memoria (MAR) para que la CPU sepa dónde buscar.",
+                                "2. Acceso a la memoria: La CPU ahora busca instrucciones en la memoria.",
+                                "Primero, se le dice a la memoria que se prepare para enviar datos (activando las señales CS y RD).",
+                                "Luego, la CPU espera a que la memoria responda y transfiere los datos al bus de datos externo.",
+                                "3. Carga de instrucciones en el registro de instrucciones (IR): la CPU Almacena información recuperada de la memoria en el registro de datos de la memoria (MDR).",
+                                "Luego toma la parte significativa de la instrucción y la coloca en el registro de instrucción (IR).",
+                                "Al mismo tiempo, el registro del programa se incrementa para apuntar a la siguiente instrucción.",
+                                "4. Lectura de la parte alta de la instrucción: Algunos comandos pueden ser muy largos y se almacenan en dos partes.",
+                                "Durante esta operación, la parte superior de la instrucción se busca en la memoria y el registro del programa se incrementa para apuntar a la siguiente parte.",
+                                "5. Carga de la parte alta de la instrucción en el registro de instrucciones: La parte alta de la instrucción se almacena en el registro de instrucciones (IR) y la CPU también puede comenzar a calcular cómo procesar la instrucción."
+                            ],
+                            "Imágenes": ["busqueda.png"]
+                        },
+                        "Fase de búsqueda de operandos": {
+                            "Contenido":
+                            [
+                                "Esta fase consta principalmente de dos periodos: ",
+                                "1. Transferencia: La dirección es transferida de bits hasta el registro MAR. Se habilita la salida de los bits y al bus del procesador.",
+                                "2. Lectura: Se activan las lecturas de la memoria CS y RD para que después del tiempo de acceso se puedan cargar los operandos en el registro MDR, así termina la búsqueda de operandos que antes su dirección estaba contenida en IR."
+                            ],
+                            "Imágenes": ["busqueda.png"]
+                        },
+                        "Fase de ejecución y almacenamiento": {
+                            "Contenido":
+                            [
+                                "Estas dos fases se realizan en el mismo periodo, en el caso de una instrucción AC <- AC + M A R en el ciclo 8 de la CPU, se conecta el registro MDR a la entrada B de la ALU activando MDR-EI.",
+                                "Se indica a ALU mediante señales OP, para terminar con la activación de la señal de carga de AC"
+                            ],
+                            "Imágenes": []
+                        }
+                    }
+                },
+                "Ejecución de la instrucción sw": {
+                    "Contenido":
+                    [
+                        "La instrucción SW #456 tiene como objetivo escribir el dato contenido en el acumulador en una dirección de memoria especificada en la instrucción.",
+                        "Esta instrucción consta de 4 bits de código y 12 bits para indicar la dirección de memoria.",
+                        "La fase de búsqueda de la instrucción es similar a la anteriormente vista en la instrucción ADD y no se implica la búsqueda de operandos.",
+                        "Por ende, pasamos directamente a la fase de ejecución, realizada en el ciclo 6 y 7.",
+                        "En el ciclo 6, se da la traslación de memoria y el contenido del Acumulador a registros específicos.",
+                        "En el ciclo 7 se realiza la escritura en la memoria principal."
+                    ],
+                    "Imágenes": ["sw.png"]
+                },
+                "Ejecución de instrucción jmz": {
+                    "Contenido":
+                    [
+                        "A diferencia de la anterior instrucción, esta realiza una bifurcación condicional utilizando direccionamiento directo.",
+                        "Se salta a la dirección contenida en el código de dirección si el indicador de cero del registro de estado está activo.",
+                        "Después de capturar la instrucción en el registro IR, en el periodo 6 inicia la fase de ejecución de la instrucción.",
+                        "Si no se cumple la condición de salto (Z=0) comienza la ejecución de una nueva instrucción.",
+                        "Ahora, si se cumple la condición se realiza la carga del PC con el valor efectivo #456 en el periodo 6, y después inicia la ejecución de una nueva instrucción."
+                    ],
+                    "Imágenes": ["jwz.png"]
+                }
+            }
+        },
+        "Multimedia":{
+            "Imágenes":{
+                "Bienvenida": [],
+                "Conceptos generales":{
+                    "Introducción": ["intro.png", "fases.png"],
+                    "Lectura": ["lectura.jpg"],
+                    "Decodificación": ["decodificacion.jpg"],
+                    "Ejecución": ["ejecucion.jpg"],
+                    "Almacenamiento": ["almacenamiento.jpg"]
+                },
+                "Cronograma instrucción add":{
+                    "Fase de búsqueda": ["busqueda.png"],
+                    "Fase de búsqueda de operandos": ["busqueda.png"],
+                    "Fase de ejecución y almacenamiento": []
+                },
+                "Ejecución de la instrucción sw":
+                [
+                    "sw.png"
+                ],
+                "Ejecución de instrucción jmz":
+                [
+                    "jwz.png"
+                ]
+            }
+        },
+        "Test":
+        {
+            "Preguntas": [
+                {
+                "Pregunta": ["La fase de decodificación en la ejecución de una instrucción de un computador suele ser más corta que un ciclo de la señal de reloj."],
+                "Opciones": 
+                {
+                    "Verdadero": 0, 
+                    "Falso": 1
+                },
+                "respuesta": ["Falso"]
+            },
+            {
+                "Pregunta": ["En la ejecución de instrucciones, ¿Qué función desempeña el registro MAR (Memory Address Register)?"],
+                "Opciones": 
+                {
+                    "Almacena el resultado de una operación aritmética": 0,
+                    "Guarda la instrucción actual a ejecutar": 0 ,
+                    "Contiene la dirección de memoria que se leerá o escribirá": 1,
+                    "Almacena temporalmente los datos de entrada del usuario": 0
+                },
+                "respuesta": ["Contiene la dirección de memoria que se leerá o escribirá"]
+            },
+            {
+                "Pregunta": ["En la ejecución de instrucciones, ¿Cuál es la función principal de la unidad de control de la CPU?"],
+                "Opciones": 
+                {
+                    "Realizar cálculos matemáticos y operaciones aritméticas": 0,
+                    "Almacenar temporalmente los resultados de las instrucciones": 0,
+                    "Transferir datos entre la CPU y la memoria principal": 0,
+                    "Interpretar y ejecutar las instrucciones del programa": 1
+                },
+                "respuesta": ["Interpretar y ejecutar las instrucciones del programa"]
+            },
+            {
+                "Pregunta": ["Durante la fase de \"Ejecución\" de una instrucción, se realizan operaciones aritméticas, lógicas o de transferencia de datos, y se generan los resultados de acuerdo con la operación especificada."],
+                "Opciones": 
+                {
+                    "Verdadero": 1,
+                    "Falso": 0
+                },
+                "respuesta": ["Verdadero"]
+            },
+            {
+                "Pregunta": ["En la fase de \"Almacenamiento\" del ciclo de procesamiento de una instrucción en una CPU, ¿Cuál de las siguientes actividades puede llevarse a cabo?"],
+                "Opciones":
+                {
+                    "Actualización del estado de los registros": 1,
+                    "Decodificación de la instrucción": 0,
+                    "Realización de operaciones aritméticas": 0,
+                    "Interpretación del operando de la instrucción": 0
+                },
+                "respuesta": ["Actualización del estado de los registros"]
+            },
+            {
+                "Pregunta": ["¿Cuál es el tercer paso en la fase de búsqueda de una CPU?"],
+                "Opciones": 
+                {
+                    "Transferir dirección de memoria al registro de programa": 0, 
+                    "Acceso a la memoria": 1,
+                    "Carga de instrucciones en el registro de instrucciones": 0, 
+                    "Lectura de la parte alta de la instrucción": 0
+                },
+                "respuesta": ["Acceso a la memoria"]
+            },
+            {
+                "Pregunta": ["¿Qué se almacena en el registro de instrucción (IR) durante la fase de búsqueda?"],
+                "Opciones":
+                {
+                    "La dirección de memoria actual": 0,
+                    "La parte alta de la instrucción": 1,
+                    "El registro de datos de la memoria": 0,
+                    "La dirección de la siguiente instrucción": 0
+                },
+                "respuesta": ["La parte alta de la instrucción"]
+            },
+            {
+                "Pregunta": ["¿Cuál es el propósito de la \"Fase de búsqueda de operandos\" en el ciclo de ejecución de una instrucción en una CPU?"],
+                "Opciones":
+                {
+                    "Almacenar la dirección de memoria en el registro MAR": 0,
+                    "Cargar el operando de memoria en el registro MDR": 1,
+                    "Realizar una operación de suma en la ALU": 0,
+                    "Actualizar el registro de estado": 0
+                },
+                "respuesta": ["Cargar el operando de memoria en el registro MDR"]
+            },
+            {
+                "Pregunta": ["¿Qué función realiza la fase de \"Búsqueda de Operandos\" en la ejecución de una instrucción en una computadora?"],
+                "Opciones":
+                {
+                    "Decodificar la instrucción": 0,
+                    "Leer la instrucción desde la memoria": 0,
+                    "Obtener los operandos necesarios para la instrucción": 1,
+                    "Almacenar los resultados de la instrucción": 0
+                },
+                "respuesta": ["Obtener los operandos necesarios para la instrucción"]
+            },
+            {
+                "Pregunta": ["En la fase de ejecución y almacenamiento del resultado,¿La ALU es la que hace operaciones aritméticas sin necesidad de alguna otra señal?"],
+                "Opciones":
+                {
+                    "Verdadero": 0,
+                    "Falso": 1
+                },
+                "respuesta": ["Falso"]
+            },
+            {
+                "Pregunta": ["¿Cuál es el propósito principal de la instrucción SW #456 en una arquitectura de procesador?"],
+                "Opciones":
+                {
+                    "Realizar una suma de dos números": 0,
+                    "Escribir el dato contenido en el acumulador en una dirección de memoria específica": 1,
+                    "Leer un valor de memoria y almacenarlo en el acumulador": 0,
+                    "Decodificar una instrucción": 0
+                },
+                "respuesta": ["Escribir el dato contenido en el acumulador en una dirección de memoria específica"]
+            },
+            {
+                "Pregunta": ["¿Cuántos bits se utilizan para indicar la dirección de memoria en la instrucción SW #456?"],
+                "Opciones":
+                {
+                    "Cuatro bits": 0,
+                    "Ocho bits": 0,
+                    "Doce bits": 1,
+                    "Dieciséis bits": 0
+                },
+                "respuesta": ["Doce bits"]
+            },
+            {
+                "Pregunta": ["¿Qué función realiza la fase de \"Búsqueda de Operandos\" en la ejecución de una instrucción en una computadora?"],
+                "Opciones":
+                {
+                    "Decodificar la instrucción": 0,
+                    "Leer la instrucción desde la memoria": 0,
+                    "Obtener los operandos necesarios para la instrucción": 1,
+                    "Almacenar los resultados de la instrucción": 0
+                },
+                "respuesta": ["Obtener los operandos necesarios para la instrucción"]
+            },
+            {
+                "Pregunta": ["En una instrucción JMZ #456, el programa saltará a la dirección de memoria \"#456\" si el indicador de cero (Z) en el registro de estado está activo."],
+                "Opciones":
+                {
+                    "Verdadero": 1,
+                    "Falso": 0
+                },
+                "respuesta": ["Verdadero"]
+            },
+            {
+                "Pregunta": ["Una de las características de la ejecución de la instrucción JMZ #456 a diferencia de la instrucción SW #456 es que no realiza una bifurcación condicional utilizando direccionamiento directo ¿Verdadero o falso?"],
+                "Opciones":
+                {
+                    "Verdadero": 0,
+                    "Falso": 1
+                },
+                "respuesta": ["Falso"]
+            },
+            {
+                "Pregunta": ["En una instrucción JMZ #456, el programa saltará a la dirección de memoria \"#456\" si el indicador de cero (Z) en el registro de estado está activo."],
+                "Opciones":
+                {
+                    "Verdadero": 1,
+                    "Falso": 0
+                },
+                "respuesta": ["Verdadero"]
+            }
+        ]},
+        "Juegos":
+        {
+            "Ahorcado":
+            {
+                "Presentación":
+                [
+                    "Bienvenido al juego del ahorcado, en este juego tendrás que adivinar la palabra que se te muestra en pantalla.",
+                    "Tienes 5 intentos para adivinar la palabra, si no lo logras, perderás el juego.",
+                    "¿Estás listo para jugar?"
+                ],
+                "Variaciones":
+                [
+                    {
+                        "Enunciado": ["Se necesitan ________ para indicar la dirección de memoria en la instrucción SW #456"],
+                        "Palabra": ["doce"]
+                    },
+                    {
+                        "Enunciado": ["En la ejecución de instrucciones, la función principal de la unidad de control de la CPU es _________ y ejecutar las instrucciones del programa"],
+                        "Palabra": ["interpretar"]
+                    },
+                    {
+                        "Enunciado": ["El propósito principal de la instrucción SW #456 es escribir el dato contenido en el __________ en una dirección de memoria específica"],
+                        "Palabra": ["acumulador"]
+                    },
+                    {
+                        "Enunciado": ["En la ejecución de una instrucción en una computadora se debe obtener los _________ necesarios para la instrucción"],
+                        "Palabra": ["operandos"]
+                    },
+                    {
+                        "Enunciado": ["En la fase de ejecución y almacenamiento del resultado, la ALU es la que hace operaciones ___________ sin necesidad de alguna otra señal"],
+                        "Palabra": ["aritmeticas"]
+                    },
+                    {
+                        "Enunciado": ["La fase de ___________ en la ejecución de una instrucción de un computador suele ser más corta que un ciclo de la señal de reloj"],
+                        "Palabra": ["decodificacion"]
+                    },
+                    {
+                        "Enunciado": ["En la fase de decodificación, se determinan las ubicaciones de _________ o registros donde se encuentran los operandos."],
+                        "Palabra": ["memoria"]
+                    },
+                    {
+                        "Enunciado": ["Los resultados de la operación se almacenan en la ubicación adecuada, en la fase de ____________, la cual es la última"],
+                        "Palabra": ["almacenamiento"]
+                    },
+                    {
+                        "Enunciado": ["En la ejecución de la instrucción #JMZ se realiza una ___________ condicional utilizando direccionamiento directo."],
+                        "Palabra": ["bifurcacion"]
+                    },
+                    {
+                        "Enunciado": ["Cada fase tiene una duración mayor que un ciclo de la señal de reloj y contiene una serie de operaciones básicas que pueden ejecutarse en _________ o en serie"],
+                        "Palabra": ["paralelo"]
+                    }
+                ]
+            }
+        }
+    }
+}

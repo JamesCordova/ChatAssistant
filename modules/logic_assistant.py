@@ -15,7 +15,7 @@ class LogicalAssist():
         self.index_question = 0
         self.current_question = None
         self.global_commands = {
-            "Salir": exit,
+            "Salir": "Salir",
             "Volver al inicio": self.database,
             "Regresar": self.database
         }
@@ -61,8 +61,8 @@ class LogicalAssist():
         if type(func) is dict:
             self.current_directory = func
             return "None is valid"
-        elif callable(func):
-            return func(0)
+        elif func =="Salir":
+            return exit(0)
         else:
             return command
         
@@ -144,7 +144,7 @@ class LogicalAssist():
             self.root.action_frame.default_button()
             self.root.update()
             query = voice_recognizer.recognize_google(audio, language='es-PE')
-            print(f"Has dicho {query}\n")
+            # print(f"Has dicho {query}\n")
             return query
 
         except speech_recognition.RequestError:
@@ -152,4 +152,5 @@ class LogicalAssist():
 
         except speech_recognition.UnknownValueError:
             print("Algo no está bien. No puedo reconocer tu micrófono o no lo tienes enchufado")
+        self.query = query
         return self.query

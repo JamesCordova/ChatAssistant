@@ -88,11 +88,11 @@ class AssistMessage(ctk.CTkFrame):
         # job.join()
         
     def speak_text(self, text):
-        # if self.speechable:
-        #     self.engine.say(text)
-        #     self.engine.runAndWait()
-        self.speak_next_sentence()
-        # self.master.root.after(500, self.speak_next_sentence)
+        if self.speechable:
+            self.engine.say(text)
+            self.engine.runAndWait()
+        # self.speak_next_sentence()
+        self.master.root.after(500, self.speak_next_sentence)
 
 class UserMessage(ctk.CTkFrame):
     def __init__(self, parent, text = ""):
@@ -248,6 +248,9 @@ class HangGame(ctk.CTkFrame):
             self.won_game()
 
     def won_game(self):
+        self.input.configure(
+                state = "disabled"
+            )
         self.word_label.configure(
             fg_color=(cf.SUCCESS_COLOR_LIGHT, cf.SUCCESS_COLOR_DARK)
         )

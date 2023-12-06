@@ -15,11 +15,14 @@ class App(ctk.CTk):
         self.color_ui = (cf.BG_COLOR_DARK, cf.BG_COLOR_LIGHT)
         
         # setting the icons 
-        icon_ctk = ImageTk.PhotoImage(file = cf.ASSIST_ICON_IMAGE)
-        self.wm_iconbitmap()
-        self.iconphoto(False, icon_ctk)
-        self.myappid = "personal.assistant.chat.1"
-        ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(self.myappid)
+        try:
+            icon_ctk = ImageTk.PhotoImage(file = cf.ASSIST_ICON_IMAGE)
+            self.wm_iconbitmap()
+            self.iconphoto(False, icon_ctk)
+            self.myappid = "personal.assistant.chat.1"
+            ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(self.myappid)
+        except:
+            pass
 
         self.geometry("600x720")
         self.minsize(600,720)
