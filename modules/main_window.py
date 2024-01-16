@@ -55,7 +55,7 @@ class AssistMessage(ctk.CTkFrame):
             master = self,
             textvariable = self.text_var,
             corner_radius = 15,
-            fg_color=("#dcdcdc", "#2b2b2b"),
+            fg_color=(cf.ASSIST_MESSAGE_COLOR_LIGHT, cf.ASSIST_MESSAGE_COLOR_DARK),
             wraplength = 400,
             justify="left"
         )
@@ -88,11 +88,40 @@ class AssistMessage(ctk.CTkFrame):
         # job.join()
         
     def speak_text(self, text):
-        if self.speechable:
-            self.engine.say(text)
-            self.engine.runAndWait()
+        # if self.speechable:
+        #     self.engine.say(text)
+        #     self.engine.runAndWait()
+
         # self.speak_next_sentence()
         self.master.root.after(500, self.speak_next_sentence)
+
+class ButtonMessage(AssistMessage):
+    def __init__(self, parent, root, images = [], text_list = [], options = [], speechable = True):
+        super().__init__(
+            parent = parent,
+            root = root,
+            images = images,
+            text_list = text_list,
+            speechable = speechable
+        )
+        for option in options:
+            print(option)
+            button = ctk.CTkButton(
+                master = self,
+                text = option,
+                corner_radius = 15,
+                fg_color = (cf.ASSIST_MESSAGE_COLOR_LIGHT, cf.ASSIST_MESSAGE_COLOR_DARK),
+                hover_color = (cf.MESSAGE_COLOR_LIGHT, cf.MESSAGE_COLOR_DARK),
+                command = lambda : root.add_game(option)
+            )
+            button.pack(
+                anchor = "w",
+                pady = 5,
+                padx = 2,
+                ipadx = 2,
+                ipady = 10
+            )
+        
 
 class UserMessage(ctk.CTkFrame):
     def __init__(self, parent, text = ""):
@@ -121,7 +150,7 @@ class HangGame(ctk.CTkFrame):
         super().__init__(
             master = parent,
             corner_radius = 15,
-            fg_color=("#dcdcdc", "#2b2b2b")
+            fg_color=(cf.ASSIST_MESSAGE_COLOR_LIGHT, cf.ASSIST_MESSAGE_COLOR_DARK)
         )
 
         self.hidden_string_variable = tk.StringVar()
@@ -136,13 +165,13 @@ class HangGame(ctk.CTkFrame):
             corner_radius = 15,
             pady = 20,
             font = ("Arial", 40),
-            fg_color=("#dcdcdc", "#2b2b2b")
+            fg_color=(cf.ASSIST_MESSAGE_COLOR_LIGHT, cf.ASSIST_MESSAGE_COLOR_DARK),
+            justify = tk.CENTER
         )
         self.word_label.place(
             relx = 0.5,
             rely = 0.5,
             anchor = "center"
-
         )
         self.info_label = ctk.CTkLabel(
             master = self,
@@ -165,7 +194,7 @@ class HangGame(ctk.CTkFrame):
             master = self,
             corner_radius = 15,
             justify = "center",
-            fg_color=("#dcdcdc", "#2b2b2b")
+            fg_color=(cf.ASSIST_MESSAGE_COLOR_LIGHT, cf.ASSIST_MESSAGE_COLOR_DARK)
         )
         self.input.place(
             relx = 0.5,
@@ -282,12 +311,12 @@ class ImageFrame(ctk.CTkFrame):
 
         self.current_image = Image.open(self.image_paths[self.current_index])
         self.current_ctk_image = ctk.CTkImage(light_image=self.current_image)
-        self.image_label = ctk.CTkLabel(master = root,text="image",corner_radius = 15,fg_color=("#dcdcdc", "#2b2b2b"))
+        self.image_label = ctk.CTkLabel(master = root,text="image",corner_radius = 15,fg_color=(cf.ASSIST_MESSAGE_COLOR_LIGHT, cf.ASSIST_MESSAGE_COLOR_DARK))
         self.image_label = ctk.CTkLabel(
                 master = self,
                 text="",
                 corner_radius = 15,
-                fg_color=("#dcdcdc", "#2b2b2b")
+                fg_color=(cf.ASSIST_MESSAGE_COLOR_LIGHT, cf.ASSIST_MESSAGE_COLOR_DARK)
         )
         self.image_label.place(
             relx = 0,
@@ -324,7 +353,7 @@ class ImageFrame(ctk.CTkFrame):
             border_width = 0,
             border_spacing = 0,
             hover_color = (cf.MESSAGE_COLOR_LIGHT, cf.MESSAGE_COLOR_DARK),
-            fg_color = ("#dcdcdc", "#2b2b2b"),
+            fg_color = (cf.ASSIST_MESSAGE_COLOR_LIGHT, cf.ASSIST_MESSAGE_COLOR_DARK),
             bg_color = "transparent",
             command = self.show_prev_image
         )
@@ -342,7 +371,7 @@ class ImageFrame(ctk.CTkFrame):
             compound = "bottom",
             corner_radius = 15,
             hover_color = (cf.MESSAGE_COLOR_LIGHT, cf.MESSAGE_COLOR_DARK),
-            fg_color = ("#dcdcdc", "#2b2b2b"),
+            fg_color = (cf.ASSIST_MESSAGE_COLOR_LIGHT, cf.ASSIST_MESSAGE_COLOR_DARK),
             bg_color = "transparent",
             command = self.show_next_image
         )
