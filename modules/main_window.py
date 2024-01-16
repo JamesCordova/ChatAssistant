@@ -31,7 +31,7 @@ class MessageFrame(ctk.CTkScrollableFrame):
     def add_message(self, widget):
         self.messages.append(widget)
         self.current_row += 1
-        self._scrollbar.set(start_value=0.9, end_value=1)
+        self._scrollbar.set(start_value=1, end_value=1.1)
         self.current_message = widget
         if type(widget) is UserMessage:
             self.event_generate("<<UserQuery>>")
