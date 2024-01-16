@@ -86,6 +86,9 @@ class LogicalAssist():
     def is_images(self):
         return self.current_directory.get(cf.IMAGES_KEY)
     
+    def is_games(self):
+        return self.current_directory.get(cf.GAMES_KEY)
+    
     def get_keyword_query(self, current_directory):
         if not current_directory.get(cf.OPTIONS_KEY):
             return

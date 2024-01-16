@@ -3,6 +3,7 @@ import ctypes
 from PIL import Image, ImageTk
 import random
 import customtkinter as ctk
+from games import exec_games as execute
 from . import main_window
 from . import settings as cf
 from . import logic_assistant as assist
@@ -77,7 +78,7 @@ class App(ctk.CTk):
     
     def render_again(self, event):
         self.assistant.current_directory = self.assistant.database
-        self.add_message_menu()
+        # self.add_message_menu()
 
     def add_user_message(self, event):
         self.assistant.query = self.action_frame.query
@@ -126,9 +127,34 @@ class App(ctk.CTk):
             self.assistant.index_question += 1
         elif self.assistant.is_images():
             self.add_images()
+        elif self.assistant.is_games():
+            pr = self.assistant.current_directory.get(cf.PRESENTATION_KEY)
+            img = self.assistant.current_directory.get(cf.IMAGES_KEY)
+            mn = self.assistant.is_games()
+            self.add_interact_menu(message = pr, images = img, options = mn, speechable = False)
+            # self.add_game()
         else:
-            self.add_game()
+            print("Error")
     
+
+    def add_interact_menu(self, message, images, options, speechable):
+        button_message = main_window.ButtonMessage(
+            parent = self.message_frame,
+            root = self,
+            images = images,
+            text_list = message,
+            options = list(options.keys()),
+            speechable = speechable
+        )
+        button_message.grid(
+            row = self.message_frame.current_row,
+            column = 0,
+            columnspan = 2,
+            sticky = "ew"
+        )
+        button_message.speak_sentences()
+        # self.update()
+        self.message_frame.add_message(button_message)
 
     def add_advice(self, is_correct):
         if is_correct:
@@ -141,8 +167,15 @@ class App(ctk.CTk):
                 fg_color = (cf.ERROR_COLOR_LIGHT, cf.ERROR_COLOR_DARK)
             )
 
-    def add_game(self):
-        variacion = random.choice(self.assistant.current_directory.get("Ahorcado").get("Variaciones"))
+    def add_game(self, game_name):
+        if game_name == cf.DEFAULT_GAME:
+            self.hang_game()
+            return
+        execute.exec_game(game_name)
+        
+
+    def hang_game(self):
+        variacion = random.choice(self.assistant.is_games().get("Ahorcado").get("Variaciones"))
         sentence = variacion.get("Enunciado")
         secret_word = variacion.get("Palabra")[0]
         self.add_assist_message(sentence, speechable=False)
@@ -156,14 +189,8 @@ class App(ctk.CTk):
             columnspan = 2,
             sticky = "ew"
         )
-        # game.place(
-        #     relx = 0,
-        #     rely = 0,
-        #     relwidth = 0.91,
-        #     relheight = 1,
-        # )      
+              
         self.message_frame.add_message(game)
-
 
     def add_images(self):
         images_list = []
@@ -193,7 +220,7 @@ class App(ctk.CTk):
     def add_message_menu(self):
         message_to_speech = []
         menu = [f"\n{index + 1}) {item}" for index, item in enumerate(self.assistant.get_list_menu())]
-        message_to_speech = self.assistant.current_directory.get(cf.PRESENTATION_KEY)+ ["\n"] + menu
+        message_to_speech = self.assistant.current_directory.get(cf.PRESENTATION_KEY) + ["\n"] + menu
         self.add_assist_message(message_to_speech)
     
     def add_question(self):
