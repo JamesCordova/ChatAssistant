@@ -403,9 +403,13 @@
                                 }
                             ]
                         },
-                        "Juego 1":
+                        "PirateMaker":
                         [],
-                        "Juego 2":
+                        "PydewValley":
+                        [],
+                        "SpaceInvaders":
+                        [],
+                        "Zelda":
                         []
                     }
                 }

@@ -3,6 +3,7 @@ import ctypes
 from PIL import Image, ImageTk
 import random
 import customtkinter as ctk
+from games import exec_games as execute
 from . import main_window
 from . import settings as cf
 from . import logic_assistant as assist
@@ -142,7 +143,7 @@ class App(ctk.CTk):
             root = self,
             images = images,
             text_list = message,
-            options = options,
+            options = list(options.keys()),
             speechable = speechable
         )
         button_message.grid(
@@ -167,6 +168,13 @@ class App(ctk.CTk):
             )
 
     def add_game(self, game_name):
+        if game_name == cf.DEFAULT_GAME:
+            self.hang_game()
+            return
+        execute.exec_game(game_name)
+        
+
+    def hang_game(self):
         variacion = random.choice(self.assistant.is_games().get("Ahorcado").get("Variaciones"))
         sentence = variacion.get("Enunciado")
         secret_word = variacion.get("Palabra")[0]
@@ -181,14 +189,8 @@ class App(ctk.CTk):
             columnspan = 2,
             sticky = "ew"
         )
-        # game.place(
-        #     relx = 0,
-        #     rely = 0,
-        #     relwidth = 0.91,
-        #     relheight = 1,
-        # )      
+              
         self.message_frame.add_message(game)
-
 
     def add_images(self):
         images_list = []

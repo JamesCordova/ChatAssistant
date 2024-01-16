@@ -30,6 +30,9 @@ STATEMENT_KEY = "Pregunta"
 IMAGES_PATH = "imgs"
 SOUNDS_PATH = "sounds"
 
+#DEFAULT ASPECTS
+DEFAULT_GAME = "Ahorcado"
+
 # MULTIMEDIA
 ASSIST_ICON_IMAGE = IMAGES_PATH + "/" + "assist_icon.png"
 MICROPHONE_DISABLE_IMAGE = IMAGES_PATH + "/" + "microphone_disable_icon.png"

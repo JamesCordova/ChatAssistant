@@ -104,15 +104,15 @@ class ButtonMessage(AssistMessage):
             text_list = text_list,
             speechable = speechable
         )
-        for option in options:
-            print(option)
+        self.options_game = []
+        for text in options:
             button = ctk.CTkButton(
                 master = self,
-                text = option,
+                text = text,
                 corner_radius = 15,
                 fg_color = (cf.ASSIST_MESSAGE_COLOR_LIGHT, cf.ASSIST_MESSAGE_COLOR_DARK),
                 hover_color = (cf.MESSAGE_COLOR_LIGHT, cf.MESSAGE_COLOR_DARK),
-                command = lambda : root.add_game(option)
+                command = lambda t = text: root.add_game(t)
             )
             button.pack(
                 anchor = "w",
@@ -121,6 +121,7 @@ class ButtonMessage(AssistMessage):
                 ipadx = 2,
                 ipady = 10
             )
+            self.options_game.append(button)
         
 
 class UserMessage(ctk.CTkFrame):
