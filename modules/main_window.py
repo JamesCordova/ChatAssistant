@@ -31,7 +31,8 @@ class MessageFrame(ctk.CTkScrollableFrame):
     def add_message(self, widget):
         self.messages.append(widget)
         self.current_row += 1
-        self._scrollbar.set(start_value=1, end_value=1.1)
+        # self._scrollbar.set(start_value=1, end_value=1.1)
+        # self._parent_frame.yview(tk.END)
         self.current_message = widget
         if type(widget) is UserMessage:
             self.event_generate("<<UserQuery>>")
@@ -50,16 +51,19 @@ class AssistMessage(ctk.CTkFrame):
         self.current_index = 0
         self.text_var.set("")
         self.speechable = speechable
-            
         self.message = ctk.CTkLabel(
             master = self,
             textvariable = self.text_var,
             corner_radius = 15,
             fg_color=(cf.ASSIST_MESSAGE_COLOR_LIGHT, cf.ASSIST_MESSAGE_COLOR_DARK),
             wraplength = 400,
-            justify="left"
+            justify="left",
         )
-        self.message.pack(anchor="w", pady=5, ipadx=2, ipady=10)
+        inner_pady = 20
+        if len(text_list) == 1:
+            inner_pady = 15
+
+        self.message.pack(anchor="w", pady=5, ipadx=2, ipady=inner_pady)
         root.update()
 
         self.engine = pyttsx3.init()
@@ -78,6 +82,7 @@ class AssistMessage(ctk.CTkFrame):
         if not(self.sentence_list and self.current_index < len(self.sentence_list)):
             self.responding = False
             self.master.event_generate("<<AvailableInput>>")
+            self.master._parent_canvas.yview_moveto(1)
             return
         
         current_sentence = str(self.sentence_list[self.current_index] + " ").format(username = cf.USERNAME, topic = cf.TOPIC)
@@ -94,6 +99,7 @@ class AssistMessage(ctk.CTkFrame):
 
         # self.speak_next_sentence()
         self.master.root.after(500, self.speak_next_sentence)
+        self.master._parent_canvas.yview_moveto(1)
 
 class ButtonMessage(AssistMessage):
     def __init__(self, parent, root, images = [], text_list = [], options = [], speechable = True):
@@ -109,6 +115,7 @@ class ButtonMessage(AssistMessage):
             button = ctk.CTkButton(
                 master = self,
                 text = text,
+                text_color = ("#000000", "#ffffff"),
                 corner_radius = 15,
                 fg_color = (cf.ASSIST_MESSAGE_COLOR_LIGHT, cf.ASSIST_MESSAGE_COLOR_DARK),
                 hover_color = (cf.MESSAGE_COLOR_LIGHT, cf.MESSAGE_COLOR_DARK),
@@ -138,11 +145,15 @@ class UserMessage(ctk.CTkFrame):
             wraplength = 400,
             justify = "right",
             fg_color = (cf.MESSAGE_COLOR_LIGHT, cf.MESSAGE_COLOR_DARK))
+        
+        inner_pady = 5
+        if len(text) > 65:
+            inner_pady = 10 
         self.message.pack(
-            ipadx=2,
-            ipady=5,
-            anchor="e",
-            pady=5
+            ipadx = 5,
+            ipady = inner_pady,
+            anchor = "e",
+            pady = 5
         )
         pass
 
@@ -203,6 +214,7 @@ class HangGame(ctk.CTkFrame):
             anchor = "center"
         )
         self.input.bind("<Return>", self.guess_letter)
+        self.master._parent_canvas.yview_moveto(1)
 
     def place_attempts(self):
         for i in range(self.attempts):

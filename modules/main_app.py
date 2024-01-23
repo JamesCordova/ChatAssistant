@@ -143,7 +143,6 @@ class App(ctk.CTk):
             root = self,
             images = images,
             text_list = message,
-            text_color = ("#000000", "#ffffff"),
             options = list(options.keys()),
             speechable = speechable
         )
