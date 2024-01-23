@@ -70,14 +70,14 @@ class GameWordSearch(ctk.CTk):
         )
 
         # setting the icon
-        try:
-            icon_ctk = ImageTk.PhotoImage(file = cf.ICON_IMAGE)
-            self.wm_iconbitmap()
-            self.iconphoto(False, icon_ctk)
-            self.myappid = "word.search.game.1"
-            ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(self.myappid)
-        except:
-            pass
+        # try:
+        #     icon_ctk = ImageTk.PhotoImage(file = cf.ICON_IMAGE)
+        #     self.wm_iconbitmap()
+        #     self.iconphoto(False, icon_ctk)
+        #     self.myappid = "word.search.game.1"
+        #     ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(self.myappid)
+        # except:
+        #     pass
 
         self.geometry("810x700")
         self.maxsize(810, 700)
@@ -137,6 +137,7 @@ class GameHeaderFrame(ctk.CTkFrame):
         )
         
         # Difficulty combobox
+        difficulties = list(self.data.get(cf.CONFIG_KEY).get(cf.DIFFICULTY_KEY).keys())
         self.difficulty_combobox = ctk.CTkComboBox(
             master = self,
             bg_color = "transparent",
@@ -145,10 +146,12 @@ class GameHeaderFrame(ctk.CTkFrame):
             button_color = (cf.HOVER_COLOR_LIGHT, cf.HOVER_COLOR_DARK),
             button_hover_color = (cf.WIDGET_COLOR_LIGHT, cf.WIDGET_COLOR_DARK),
             dropdown_fg_color = (cf.HOVER_COLOR_LIGHT, cf.HOVER_COLOR_DARK),
-            values = list(self.data.get(cf.CONFIG_KEY).get(cf.DIFFICULTY_KEY).keys()),
+            values = difficulties,
+            state = "readonly",
             justify = "center",
             command = self.reload
         )
+        self.difficulty_combobox.set(cf.DEFAULT_DIFFICULTY)
         # Timer
         self.timer_label = TimerLabel(self, time = self.get_real_time())
         self.timer_label.start_timer()
@@ -159,9 +162,9 @@ class GameHeaderFrame(ctk.CTkFrame):
 
         self.rowconfigure([0, 1], uniform = "a")
 
-        self.timer_label.grid(row = 0, column = 0, sticky = "w", rowspan = 2)
+        self.timer_label.grid(row = 0, column = 0, sticky = "w", rowspan = 2, padx = 20)
         self.title.grid(row = 0, column = 1, sticky = "nsew")
-        self.difficulty_combobox.grid(row = 0, column = 2, sticky = "e", rowspan = 2)
+        self.difficulty_combobox.grid(row = 0, column = 2, sticky = "e", rowspan = 2, padx = 20)
 
     def lose_game(self, event):
         self.info_label.configure(
@@ -172,6 +175,7 @@ class GameHeaderFrame(ctk.CTkFrame):
         self.master.game.disable_grid()
 
     def win_game(self, event):
+        self.timer_label.stop_timer()
         self.info_label.configure(
             text = "Ganaste, descubriste las palabras",
             fg_color = (cf.SUCCESS_COLOR_LIGHT, cf.SUCCESS_COLOR_DARK),
@@ -180,6 +184,7 @@ class GameHeaderFrame(ctk.CTkFrame):
         self.master.game.disable_grid()
     
     def reload_timer(self):
+        self.timer_label.stop_timer()
         self.timer_label.start_timer(time = self.get_real_time())
     
     def reload(self, event):
@@ -319,6 +324,7 @@ class GameFrame(ctk.CTkFrame):
         self.word_grid_frame.place_forget()
         self.word_list_frame.place_forget()
         self.render_words()
+        self.master.game.word_list_frame.bind("<<GameWon>>", self.master.header.win_game)
 
     def hide_question(self, event):
         word = self.word_grid_frame.last_word
@@ -462,7 +468,7 @@ class ListWordsFrame(ctk.CTkFrame):
                 continue
             self.frame_scroll_questions.label_words[word_name] = ctk.CTkLabel(
                 master = self.frame_scroll_questions,
-                wraplength = 280,
+                wraplength = 270,
                 justify = "left",
                 corner_radius =  15,
                 text = word_statement.get(cf.QUESTION_KEY)[0],
@@ -478,7 +484,10 @@ class ListWordsFrame(ctk.CTkFrame):
             fg_color = (cf.SUCCESS_COLOR_LIGHT, cf.SUCCESS_COLOR_DARK),
         )
         self.counter_words += 1
-        if self.counter_words == len(self.current_words):
+        print(word)
+        print("de la lista")
+        print(list(self.frame_scroll_questions.label_words.keys()))
+        if self.counter_words >= len(self.current_words):
             self._canvas.event_generate("<<GameWon>>")
         self.frame_scroll_questions.label_words[word].update()
 
@@ -521,11 +530,12 @@ class TimerLabel(ctk.CTkLabel):
     
     def stop_timer(self):
         self.is_running = False
-        self._canvas.event_generate("<<Timeout>>")
+        self.after_cancel(self.after_id)
     
     def update_timer(self):
         if self.time < 0 or not self.is_running:
             self.stop_timer()
+            self._canvas.event_generate("<<Timeout>>")
             return
 
         minutes = self.time // 60
@@ -537,7 +547,9 @@ class TimerLabel(ctk.CTkLabel):
         self.time -= 1
 
         if self.winfo_exists():
-            self.after(1000, self.update_timer)
+            self.after_id = self.after(1000, self.update_timer)
+        else:
+            self.stop_timer()
         
 
 def print_grid(grid):
@@ -558,7 +570,7 @@ def darken_color(hex_color, factor=0.7):
 
     return darkened_hex_color
 
-def run_game(data = cf.DEFAULT_DATA):
+def run_game(data = None):
     if data is None:
         with open("info.json", 'r', encoding="utf-8") as file:
             info = json.load(file)
