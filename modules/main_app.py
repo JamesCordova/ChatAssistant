@@ -32,6 +32,7 @@ class App(ctk.CTk):
             background = self.color_ui
         )
         # ctk.set_appearance_mode("light")
+        self.allow_speech = True
         self.database = self.load_database()
         self.advice_label = ctk.CTkLabel(master = self)
         self.message_frame = main_window.MessageFrame(self)
@@ -199,7 +200,7 @@ class App(ctk.CTk):
         else:
             images_list = self.list_for_dictionary_values(self.assistant.is_images())
         
-        self.add_assist_message(images = images_list)
+        self.add_assist_message(assist_message = [f"{len(images_list)} {cf.IMAGES_KEY}"], images = images_list)
     
     def list_for_dictionary_values(self, dictionary):
         list_values = []
