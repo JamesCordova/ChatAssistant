@@ -35,3 +35,18 @@ Por último si deseas ejecutar el proyecto solo necesitas correr el script main.
 ```bash
 python main.py
 ```
+
+## Fuente de los juegos
+
+Algunos de los juegos son de ejemplo de repositorios utilizando pygame para enseñanza
+
+- PirateMaker
+- PydewValley
+- SpaceInvaders
+- Zelda
+
+Por otro lado los repositorios de los demás juegos son parte del equipo
+
+- [SopaLetras](https://github.com/JamesCordova/word-search)
+- [Mecanografia](https://github.com/JeanChara/mecanography_game)
+- [Memory]() (Aun no integrado)
