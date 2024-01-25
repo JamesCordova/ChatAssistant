@@ -484,9 +484,6 @@ class ListWordsFrame(ctk.CTkFrame):
             fg_color = (cf.SUCCESS_COLOR_LIGHT, cf.SUCCESS_COLOR_DARK),
         )
         self.counter_words += 1
-        print(word)
-        print("de la lista")
-        print(list(self.frame_scroll_questions.label_words.keys()))
         if self.counter_words >= len(self.current_words):
             self._canvas.event_generate("<<GameWon>>")
         self.frame_scroll_questions.label_words[word].update()
