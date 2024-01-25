@@ -34,6 +34,7 @@ class MessageFrame(ctk.CTkScrollableFrame):
         # self._scrollbar.set(start_value=1, end_value=1.1)
         # self._parent_frame.yview(tk.END)
         self.current_message = widget
+        self._parent_canvas.yview_moveto(1)
         if type(widget) is UserMessage:
             self.event_generate("<<UserQuery>>")
         return widget
