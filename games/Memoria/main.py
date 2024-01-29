@@ -102,7 +102,8 @@ class Memorama:
         while True:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    sys.exit()
+                    pygame-quit()
+                    # sys.exit()
                 elif event.type == pygame.MOUSEBUTTONDOWN and self.puede_jugar:
                     xAbsoluto, yAbsoluto = event.pos
                     if self.boton.collidepoint(event.pos):
