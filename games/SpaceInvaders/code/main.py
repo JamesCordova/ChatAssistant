@@ -135,7 +135,7 @@ class Game:
 					self.lives -= 1
 					if self.lives <= 0:
 						pygame.quit()
-						sys.exit()
+						# sys.exit()
 
 		# aliens
 		if self.aliens:
@@ -144,7 +144,7 @@ class Game:
 
 				if pygame.sprite.spritecollide(alien,self.player,False):
 					pygame.quit()
-					sys.exit()
+					# sys.exit()
 	
 	def display_lives(self):
 		for live in range(self.lives - 1):
@@ -215,7 +215,7 @@ def run_game():
 		for event in pygame.event.get():
 			if event.type == pygame.QUIT:
 				pygame.quit()
-				sys.exit()
+				# sys.exit()
 			if event.type == ALIENLASER:
 				game.alien_shoot()
 

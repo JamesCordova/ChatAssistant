@@ -211,7 +211,7 @@ class Editor:
 		for event in pygame.event.get():
 			if event.type == pygame.QUIT:
 				pygame.quit()
-				sys.exit()
+				# sys.exit()
 			if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
 				self.switch(self.create_grid())
 				self.editor_music.stop()

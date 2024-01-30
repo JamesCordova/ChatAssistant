@@ -15,6 +15,9 @@ build/
 # Compiled UI files
 *.pyw
 
+# Specs version
+*.spec
+
 # Miscellaneous
 *.log
 *.bak
