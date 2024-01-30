@@ -38,7 +38,7 @@ python main.py
 
 ## Fuente de los juegos
 
-Algunos de los juegos son de ejemplo de repositorios utilizando pygame para enseñanza
+Algunos de los juegos son de ejemplo de repositorios utilizando pygame para enseñanza ([ClearCode](https://github.com/clear-code-projects))
 
 - PirateMaker
 - PydewValley
@@ -49,4 +49,4 @@ Por otro lado los repositorios de los demás juegos son parte del equipo
 
 - [SopaLetras](https://github.com/JamesCordova/word-search)
 - [Mecanografia](https://github.com/JeanChara/mecanography_game)
-- [Memory]() (Aun no integrado)
+- [Memory](https://github.com/ianthony4/Game_AC_Final)
