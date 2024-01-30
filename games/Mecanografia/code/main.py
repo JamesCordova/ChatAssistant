@@ -22,7 +22,7 @@ class MainGame:
         self.clock = pygame.time.Clock()
         
         # Cargar la fuente
-        self.font = pygame.font.Font("./fuente/Cafe.ttf", self.FONT_SIZE)
+        self.font = pygame.font.Font("./font/Cafe.ttf", self.FONT_SIZE)
 
         # Lista de palabras/Enunciados para el juego
         self.palabras = ["Microprocesador",
@@ -110,7 +110,7 @@ class MainGame:
     # Función principal del juego
     def run(self):
         # seleccion y reproduccion de musica
-        music_files = ["./sfx/song1.OGG",] # Agregar musica en caso se desee, la musica utilizada no es de nuestra pertenencia
+        music_files = ["./sfx/song1.ogg"] # Agregar musica en caso se desee, la musica utilizada no es de nuestra pertenencia
         #Sonido de error
         fallo_sound = pygame.mixer.Sound("./sfx/error.mp3")
         current_song_index = 0
@@ -136,7 +136,7 @@ class MainGame:
 
         while True:
             imagen = pygame.transform.scale(background,(self.WIDTH,self.HEIGHT))
-            self.screen.blit(imagen, [0,0])
+            self.screen.blit(imagen, [0, 0])
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT: # Para cerrar el juego
