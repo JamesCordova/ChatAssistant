@@ -21,8 +21,8 @@ class MainGame:
         pygame.display.set_caption("Juego de Mecanografía")
         self.clock = pygame.time.Clock()
         
-        # Cargar la fuente
-        self.font = pygame.font.Font("./font/Cafe.ttf", self.FONT_SIZE)
+        # Cargar la fonts
+        self.font = pygame.font.Font("./font/Winter Storm.ttf", self.FONT_SIZE)
 
         # Lista de palabras/Enunciados para el juego
         self.palabras = ["Microprocesador",
@@ -110,9 +110,10 @@ class MainGame:
     # Función principal del juego
     def run(self):
         # seleccion y reproduccion de musica
-        music_files = ["./sfx/song1.ogg"] # Agregar musica en caso se desee, la musica utilizada no es de nuestra pertenencia
+        music_files = ["./sfx/song1.OGG",] # Agregar musica en caso se desee, la musica utilizada no es de nuestra pertenencia
         #Sonido de error
         fallo_sound = pygame.mixer.Sound("./sfx/error.mp3")
+        fallo_sound.set_volume(0.2)
         current_song_index = 0
         pygame.mixer.music.load(music_files[current_song_index])
         pygame.mixer.music.set_volume(0.15)
@@ -136,7 +137,7 @@ class MainGame:
 
         while True:
             imagen = pygame.transform.scale(background,(self.WIDTH,self.HEIGHT))
-            self.screen.blit(imagen, [0, 0])
+            self.screen.blit(imagen, [0,0])
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT: # Para cerrar el juego
@@ -162,6 +163,7 @@ class MainGame:
                             fallo_sound.play()
                     elif event.key == pygame.K_RETURN and not temporizador_iniciado: # Para iniciar el temporizador e iniciar el juego al presionar ENTER
                         temporizador_iniciado = True
+                        tiempo_restante = tiempo_limite
                         aciertos = 0
                         fallos = 0
                         letras_acertadas = 0
@@ -174,7 +176,7 @@ class MainGame:
                     palabra_completada = True
                     palabra_actual = self.obtener_palabra_aleatoria()
                     input_usuario = ""
-                    tiempo_restante += 5
+                    tiempo_restante += 3
                 else:
                     palabra_completada = False
                 
@@ -219,7 +221,6 @@ class MainGame:
                         tiempo_restante = tiempo_limite
 
 def run_game():
-    # here runs the game
     juego = MainGame()
     juego.run()
     

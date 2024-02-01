@@ -25,3 +25,6 @@ build/
 
 # Virtual env
 venv/
+
+# env variables
+.env
