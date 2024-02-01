@@ -8,7 +8,7 @@ class LogicalAssist():
         self.root = root
         self.database = database
         self.current_directory = {
-            "Solicitud": ["Hola. Soy tu Asistente Virtual. Fui creada para instruirte todo respecto a la Estructura de un computador.", "Antes de empezar ¿Podrias decirme tu nombre?"],
+            "Solicitud": ["Hola. Soy tu Asistente Virtual.", "Fui creada para instruirte todo respecto a la Estructura de un computador.", "Antes de empezar ¿Podrias decirme tu nombre?"],
             "Ejecución de instrucciones": self.database
         }
         # self.current_directory = self.database

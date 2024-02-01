@@ -3,6 +3,7 @@
             [
                 "{username} Ahora voy a explicarte sobre las opciones que tiene este programa. Tienes 3 opciones para escoger.",
                 "La opción Aprendizaje es donde podrás aprender todo con respecto a la {topic}.",
+                "También tenemos la opción de multimedia donde se podrá observar las imágenes utilizadas",
                 "La opción Tests es donde podrás poner en práctica lo que aprendiste mediante exámenes.",
                 "Y por último, la tercer opción, es Juegos, donde tambien podrás demostrar lo que aprendiste jugando."
             ],
